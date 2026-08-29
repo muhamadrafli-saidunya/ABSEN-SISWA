@@ -289,7 +289,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [schoolProfile, setSchoolProfile] = useState<SchoolProfile>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEYS.PROFILE);
-      if (saved) return JSON.parse(saved);
+      if (saved) return { ...initialSchoolProfile, ...JSON.parse(saved) };
     } catch (e) {}
     return initialSchoolProfile;
   });

@@ -64,15 +64,50 @@ export interface LeaveRequest {
 export interface SchoolProfile {
   name: string;
   npsn: string;
-  address: string;
+  nss?: string;
+  bentukPendidikan?: string; // e.g. 'Sekolah Dasar (SD)'
+  statusSekolah?: string; // e.g. 'Negeri' / 'Swasta'
+  akreditasi?: string; // e.g. 'A (Unggul)'
+  skAkreditasi?: string; // e.g. '1347/BAN-SM/SK/2023'
+  kurikulum?: string; // e.g. 'Kurikulum Merdeka'
+
+  // Alamat & Wilayah Geografis Lengkap
+  street: string; // Jalan, RT/RW, No, Dusun
+  village: string; // Desa / Kelurahan
+  district: string; // Kecamatan
+  regency: string; // Kabupaten / Kota
+  province: string; // Provinsi
+  postalCode: string; // Kode Pos
+  address: string; // Composite full address
+  coordinates?: string; // e.g. '-6.2382, 106.8045'
+
+  // Instansi Pembina & Kontak Resmi
+  dinasPendidikan?: string; // e.g. 'Suku Dinas Pendidikan Wilayah I Jakarta Selatan'
+  provinsiDinas?: string; // e.g. 'Dinas Pendidikan Provinsi DKI Jakarta'
   phone: string;
+  fax?: string;
   email: string;
+  website?: string;
+
+  // Pimpinan & Pengelola
   principalName: string;
   principalNip: string;
+  principalPhone?: string;
+  operatorName?: string;
+  operatorNip?: string;
+  operatorPhone?: string;
+
+  // Akademik & Operasional
   academicYear: string;
   semester: 'Ganjil' | 'Genap';
-  schoolStartTime: string; // e.g. 07:00
-  lateThresholdTime: string; // e.g. 07:15
+  schoolStartTime: string; // e.g. '07:00'
+  lateThresholdTime: string; // e.g. '07:15'
+  schoolEndTime?: string; // e.g. '13:30'
+
+  // Visi, Misi, & Nilai
+  motto?: string;
+  vision?: string;
+  mission?: string[];
 }
 
 export interface UserSession {

@@ -3,15 +3,56 @@ import { Student, ClassRoom, AttendanceRecord, LeaveRequest, SchoolProfile, User
 export const initialSchoolProfile: SchoolProfile = {
   name: 'SD NEGERI 01 HARAPAN BANGSA',
   npsn: '20108922',
-  address: 'Jl. Merdeka No. 45, Kebayoran Baru, Jakarta Selatan, DKI Jakarta',
+  nss: '101016001001',
+  bentukPendidikan: 'Sekolah Dasar (SD)',
+  statusSekolah: 'Negeri',
+  akreditasi: 'A (Unggul)',
+  skAkreditasi: '1347/BAN-SM/SK/2023',
+  kurikulum: 'Kurikulum Merdeka',
+
+  // Wilayah Administratif & Alamat Lengkap
+  street: 'Jl. Merdeka Raya No. 45, RT. 004 / RW. 002',
+  village: 'Kelurahan Selong',
+  district: 'Kecamatan Kebayoran Baru',
+  regency: 'Kota Administrasi Jakarta Selatan',
+  province: 'DKI Jakarta',
+  postalCode: '12110',
+  address: 'Jl. Merdeka Raya No. 45, RT. 004 / RW. 002, Kel. Selong, Kec. Kebayoran Baru, Kota Jakarta Selatan, DKI Jakarta 12110',
+  coordinates: '-6.2382, 106.8045',
+
+  // Instansi Pembina & Kontak Resmi
+  dinasPendidikan: 'Suku Dinas Pendidikan Wilayah I Jakarta Selatan',
+  provinsiDinas: 'Dinas Pendidikan Provinsi DKI Jakarta',
   phone: '(021) 7890-1234',
-  email: 'info@sdn01harapanbangsa.sch.id',
+  fax: '(021) 7890-1235',
+  email: 'sdn01harapanbangsa@kemdikbud.go.id',
+  website: 'https://sdn01harapanbangsa.sch.id',
+
+  // Pimpinan & Pengelola
   principalName: 'Dra. Hj. Siti Rahmawati, M.Pd.',
   principalNip: '19680512 199303 2 004',
+  principalPhone: '0811-9876-5432',
+  operatorName: 'Ferry Ramadhani, S.Kom.',
+  operatorNip: '19920815 201802 1 003',
+  operatorPhone: '0812-3456-7890',
+
+  // Akademik & Operasional
   academicYear: '2025/2026',
   semester: 'Genap',
   schoolStartTime: '07:00',
   lateThresholdTime: '07:15',
+  schoolEndTime: '13:30',
+
+  // Visi, Misi, & Nilai
+  motto: 'Cerdas, Berkarakter, Berakhlak Mulia, dan Berwawasan Lingkungan',
+  vision: 'Terwujudnya peserta didik yang beriman, bertakwa, berakhlak mulia, cerdas, terampil, mandiri, dan berbudaya lingkungan menuju Generasi Emas Indonesia.',
+  mission: [
+    'Menanamkan keimanan dan ketakwaan melalui pengamalan ajaran agama dalam kehidupan sehari-hari.',
+    'Menyelenggarakan pembelajaran yang aktif, inovatif, kreatif, efektif, dan menyenangkan (PAIKEM) berbasis Profil Pelajar Pancasila.',
+    'Mengembangkan potensi bakat, minat, literasi, numerasi, dan kreativitas siswa di bidang akademik maupun non-akademik.',
+    'Membentuk karakter santun, disiplin, jujur, dan berdaya saing global.',
+    'Menciptakan lingkungan sekolah yang bersih, hijau, sehat, asri, aman, dan ramah anak.'
+  ],
 };
 
 export const initialClasses: ClassRoom[] = [

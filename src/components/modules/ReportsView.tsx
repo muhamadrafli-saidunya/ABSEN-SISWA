@@ -288,19 +288,22 @@ export const ReportsView: React.FC = () => {
               <School className="w-7 h-7" />
             </div>
             <div className="text-left">
-              <h3 className="text-base md:text-lg font-black tracking-wide text-stone-900 dark:text-white uppercase">
-                PEMERINTAH KOTA ADMINISTRASI JAKARTA SELATAN
+              <h3 className="text-sm md:text-base font-black tracking-wide text-stone-900 dark:text-white uppercase">
+                {schoolProfile.provinsiDinas ? schoolProfile.provinsiDinas.toUpperCase() : `PEMERINTAH ${schoolProfile.regency ? schoolProfile.regency.toUpperCase() : 'DAERAH'}`}
               </h3>
-              <h4 className="text-sm md:text-base font-extrabold text-[#4a0404] dark:text-rose-400 uppercase">
-                DINAS PENDIDIKAN DAN KEBUDAYAAN
+              <h4 className="text-xs md:text-sm font-extrabold text-[#4a0404] dark:text-rose-400 uppercase">
+                {schoolProfile.dinasPendidikan || 'DINAS PENDIDIKAN DAN KEBUDAYAAN'}
               </h4>
-              <h2 className="text-lg md:text-xl font-black text-stone-900 dark:text-white">
+              <h2 className="text-base md:text-lg font-black text-stone-900 dark:text-white uppercase">
                 {schoolProfile.name}
               </h2>
             </div>
           </div>
           <p className="text-[11px] text-stone-600 dark:text-stone-400 pt-1">
             {schoolProfile.address} • Telp: {schoolProfile.phone} • Email: {schoolProfile.email}
+          </p>
+          <p className="text-[10px] text-stone-500 dark:text-stone-400">
+            NPSN: <strong>{schoolProfile.npsn}</strong> {schoolProfile.nss ? `• NSS: ${schoolProfile.nss}` : ''} • Akreditasi: <strong>{schoolProfile.akreditasi || 'A'}</strong> • Kurikulum: <strong>{schoolProfile.kurikulum || 'Kurikulum Merdeka'}</strong>
           </p>
           <div className="pt-2 text-xs font-bold uppercase tracking-wider text-stone-800 dark:text-stone-200">
             LAPORAN REKAPITULASI KEHADIRAN SISWA
