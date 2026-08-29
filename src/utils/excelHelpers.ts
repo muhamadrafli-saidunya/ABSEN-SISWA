@@ -459,3 +459,93 @@ export function exportClassesToExcel(classes: ClassRoom[], students: Student[]) 
   const dateStr = new Date().toISOString().split('T')[0];
   XLSX.writeFile(wb, `Data_Kelas_SD_${dateStr}.xlsx`);
 }
+
+/**
+ * Exports monthly or date-range attendance matrix table to Excel.
+ */
+export function exportAttendanceMatrixToExcel(
+  schoolProfile: any,
+  activeClass: any,
+  reportDates: string[],
+  studentMatrix: any[]
+) {
+  const wb = XLSX.utils.book_new();
+
+  const isSunday = (dateStr: string) => {
+    const d = new Date(dateStr + 'T00:00:00');
+    return d.getDay() === 0;
+  };
+
+  const headers = [
+    'No',
+    'NISN',
+    'NIS',
+    'Nama Siswa',
+    'L/P',
+    'Kelas',
+    ...reportDates.map((d) => {
+      const dateObj = new Date(d + 'T00:00:00');
+      const dayNum = dateObj.getDate();
+      const isSun = isSunday(d);
+      const dayName = isSun ? 'Min' : dateObj.toLocaleDateString('id-ID', { weekday: 'short' });
+      return `${dayNum} (${dayName})`;
+    }),
+    'Hadir (H)',
+    'Terlambat (T)',
+    'Sakit (S)',
+    'Izin (I)',
+    'Alpa (A)',
+    '% Kehadiran',
+  ];
+
+  const rows = studentMatrix.map((m, idx) => {
+    const rowObj: Record<string, any> = {
+      'No': idx + 1,
+      'NISN': m.student.nisn,
+      'NIS': m.student.nis,
+      'Nama Siswa': m.student.name,
+      'L/P': m.student.gender,
+      'Kelas': m.student.className,
+    };
+
+    m.dateStatuses.forEach((ds: any, dIdx: number) => {
+      const colHeader = headers[6 + dIdx];
+      rowObj[colHeader] = ds.status;
+    });
+
+    rowObj['Hadir (H)'] = m.hCount;
+    rowObj['Terlambat (T)'] = m.tCount;
+    rowObj['Sakit (S)'] = m.sCount;
+    rowObj['Izin (I)'] = m.iCount;
+    rowObj['Alpa (A)'] = m.aCount;
+    rowObj['% Kehadiran'] = `${m.rate}%`;
+
+    return rowObj;
+  });
+
+  const ws = XLSX.utils.json_to_sheet(rows);
+
+  // Set column widths
+  ws['!cols'] = [
+    { wch: 6 },
+    { wch: 16 },
+    { wch: 12 },
+    { wch: 28 },
+    { wch: 6 },
+    { wch: 14 },
+    ...reportDates.map(() => ({ wch: 9 })),
+    { wch: 10 },
+    { wch: 12 },
+    { wch: 10 },
+    { wch: 10 },
+    { wch: 10 },
+    { wch: 14 },
+  ];
+
+  XLSX.utils.book_append_sheet(wb, ws, 'Rekap_Presensi_Bulanan');
+  const className = activeClass ? activeClass.name.replace(/\s+/g, '_') : 'Semua_Kelas';
+  XLSX.writeFile(
+    wb,
+    `Rekap_Presensi_${schoolProfile?.name ? schoolProfile.name.replace(/\s+/g, '_') : 'SD'}_${className}_${reportDates[0]}_sd_${reportDates[reportDates.length - 1]}.xlsx`
+  );
+}

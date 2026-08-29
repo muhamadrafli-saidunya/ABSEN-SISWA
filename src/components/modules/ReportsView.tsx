@@ -12,7 +12,10 @@ import {
   Clock,
   Sparkles,
   School,
+  FileDown,
+  Info,
 } from 'lucide-react';
+import { exportAttendanceMatrixToExcel } from '../../utils/excelHelpers';
 
 export const ReportsView: React.FC = () => {
   const {
@@ -24,11 +27,19 @@ export const ReportsView: React.FC = () => {
     setSelectedClassId,
   } = useApp();
 
-  // Period mode: 'weekly' (last 7 days) | 'monthly' (current month dates)
-  const [periodMode, setPeriodMode] = useState<'weekly' | 'monthly'>('weekly');
+  // Period mode: 'monthly' (1 month full) | 'weekly' (last 7 days) | 'biweekly_1' (1-15) | 'biweekly_2' (16-end) | 'custom' (range)
+  const [periodMode, setPeriodMode] = useState<'monthly' | 'weekly' | 'biweekly_1' | 'biweekly_2' | 'custom'>('monthly');
   const [selectedMonth, setSelectedMonth] = useState('2026-08');
+  const [customStartDate, setCustomStartDate] = useState('2026-08-01');
+  const [customEndDate, setCustomEndDate] = useState('2026-08-31');
 
   const activeClass = classes.find((c) => c.id === selectedClassId) || classes[0];
+
+  // Helper to check if a date string is Sunday
+  const isSunday = (dateStr: string) => {
+    const d = new Date(dateStr + 'T00:00:00');
+    return d.getDay() === 0;
+  };
 
   // Generate date list based on selected period
   const reportDates = useMemo(() => {
@@ -38,16 +49,48 @@ export const ReportsView: React.FC = () => {
         d.setDate(d.getDate() - (6 - i));
         return d.toISOString().split('T')[0];
       });
-    } else {
-      // Monthly 1st to 15th/current date
-      const [year, month] = selectedMonth.split('-').map(Number);
-      const daysInMonth = new Date(year, month, 0).getDate();
-      return Array.from({ length: Math.min(daysInMonth, 15) }, (_, i) => {
+    }
+
+    if (periodMode === 'custom') {
+      const start = new Date(customStartDate + 'T00:00:00');
+      const end = new Date(customEndDate + 'T00:00:00');
+      if (isNaN(start.getTime()) || isNaN(end.getTime()) || start > end) {
+        return [customStartDate];
+      }
+      const dates: string[] = [];
+      const curr = new Date(start);
+      while (curr <= end) {
+        dates.push(curr.toISOString().split('T')[0]);
+        curr.setDate(curr.getDate() + 1);
+      }
+      return dates;
+    }
+
+    // Monthly modes
+    const [year, month] = selectedMonth.split('-').map(Number);
+    const daysInMonth = new Date(year, month, 0).getDate();
+
+    if (periodMode === 'biweekly_1') {
+      return Array.from({ length: Math.min(15, daysInMonth) }, (_, i) => {
         const dayStr = (i + 1).toString().padStart(2, '0');
         return `${year}-${month.toString().padStart(2, '0')}-${dayStr}`;
       });
     }
-  }, [periodMode, selectedMonth]);
+
+    if (periodMode === 'biweekly_2') {
+      const length = daysInMonth - 15;
+      return Array.from({ length: Math.max(0, length) }, (_, i) => {
+        const dayStr = (i + 16).toString().padStart(2, '0');
+        return `${year}-${month.toString().padStart(2, '0')}-${dayStr}`;
+      });
+    }
+
+    // Default 'monthly': FULL days of the selected month (1 s/d 28/29/30/31)
+    return Array.from({ length: daysInMonth }, (_, i) => {
+      const dayStr = (i + 1).toString().padStart(2, '0');
+      return `${year}-${month.toString().padStart(2, '0')}-${dayStr}`;
+    });
+  }, [periodMode, selectedMonth, customStartDate, customEndDate]);
 
   // Students in selected class
   const classStudents = useMemo(() => {
@@ -57,6 +100,15 @@ export const ReportsView: React.FC = () => {
         s.status === 'aktif'
     );
   }, [students, selectedClassId]);
+
+  // Sunday count & Effective school days
+  const sundayDates = useMemo(() => {
+    return reportDates.filter((d) => isSunday(d));
+  }, [reportDates]);
+
+  const effectiveSchoolDaysCount = useMemo(() => {
+    return reportDates.length - sundayDates.length;
+  }, [reportDates, sundayDates]);
 
   // Compute student matrix records
   const studentMatrix = useMemo(() => {
@@ -68,10 +120,13 @@ export const ReportsView: React.FC = () => {
       let tCount = 0;
 
       const dateStatuses = reportDates.map((dateStr) => {
+        const isSun = isSunday(dateStr);
         const rec = attendanceRecords.find(
           (r) => r.studentId === student.id && r.date === dateStr
         );
-        const status = rec ? rec.status : 'H'; // Default assumed H for past filled
+
+        // If it's Sunday and no explicit record exists, treat as Holiday (L)
+        let status = rec ? rec.status : isSun ? 'L' : 'H';
 
         if (status === 'H') hCount++;
         else if (status === 'T') {
@@ -84,12 +139,14 @@ export const ReportsView: React.FC = () => {
         return {
           date: dateStr,
           status,
+          isSunday: isSun,
           notes: rec?.notes || '',
         };
       });
 
-      const totalDays = reportDates.length;
-      const rate = totalDays > 0 ? Math.round((hCount / totalDays) * 100) : 100;
+      // Calculate attendance rate based on effective school days (excluding Sundays)
+      const baseDays = effectiveSchoolDaysCount > 0 ? effectiveSchoolDaysCount : reportDates.length;
+      const rate = baseDays > 0 ? Math.min(100, Math.round((hCount / baseDays) * 100)) : 100;
 
       return {
         student,
@@ -102,7 +159,7 @@ export const ReportsView: React.FC = () => {
         rate,
       };
     });
-  }, [classStudents, reportDates, attendanceRecords]);
+  }, [classStudents, reportDates, attendanceRecords, effectiveSchoolDaysCount]);
 
   // Overall Class summary metrics
   const classOverallStats = useMemo(() => {
@@ -118,15 +175,42 @@ export const ReportsView: React.FC = () => {
       totalA += m.aCount;
     });
 
-    const totalSlots = studentMatrix.length * reportDates.length;
+    const baseDays = effectiveSchoolDaysCount > 0 ? effectiveSchoolDaysCount : reportDates.length;
+    const totalSlots = studentMatrix.length * baseDays;
     const avgRate = totalSlots > 0 ? Math.round((totalH / totalSlots) * 100) : 0;
 
     return { totalH, totalS, totalI, totalA, avgRate };
-  }, [studentMatrix, reportDates]);
+  }, [studentMatrix, reportDates, effectiveSchoolDaysCount]);
+
+  // Daily totals per column for footer
+  const dailyColumnStats = useMemo(() => {
+    return reportDates.map((dateStr) => {
+      const isSun = isSunday(dateStr);
+      if (isSun) {
+        return { isSunday: true, presentCount: 0, absentCount: 0 };
+      }
+      let presentCount = 0;
+      let absentCount = 0;
+      studentMatrix.forEach((m) => {
+        const ds = m.dateStatuses.find((d) => d.date === dateStr);
+        if (ds?.status === 'H' || ds?.status === 'T') {
+          presentCount++;
+        } else if (ds?.status === 'A' || ds?.status === 'S' || ds?.status === 'I') {
+          absentCount++;
+        }
+      });
+      return { isSunday: false, presentCount, absentCount };
+    });
+  }, [reportDates, studentMatrix]);
 
   // Trigger browser print dialog for formal school attendance sheet
   const handlePrint = () => {
     window.print();
+  };
+
+  // Export to Excel (.xlsx)
+  const handleExportExcel = () => {
+    exportAttendanceMatrixToExcel(schoolProfile, activeClass, reportDates, studentMatrix);
   };
 
   // Export CSV
@@ -134,10 +218,17 @@ export const ReportsView: React.FC = () => {
     const headers = [
       'No',
       'NISN',
+      'NIS',
       'Nama Siswa',
+      'L/P',
       'Kelas',
-      ...reportDates.map((d) => d.slice(5)), // MM-DD
+      ...reportDates.map((d) => {
+        const isSun = isSunday(d);
+        const dayNum = d.slice(8);
+        return `${dayNum}${isSun ? '(Min)' : ''}`;
+      }),
       'Total H',
+      'Total T',
       'Total S',
       'Total I',
       'Total A',
@@ -147,10 +238,13 @@ export const ReportsView: React.FC = () => {
     const rows = studentMatrix.map((m, idx) => [
       idx + 1,
       `'${m.student.nisn}`,
+      `'${m.student.nis}`,
       `"${m.student.name}"`,
+      m.student.gender,
       `"${m.student.className}"`,
       ...m.dateStatuses.map((ds) => ds.status),
       m.hCount,
+      m.tCount,
       m.sCount,
       m.iCount,
       m.aCount,
@@ -158,7 +252,7 @@ export const ReportsView: React.FC = () => {
     ]);
 
     const csvContent =
-      'data:text/csv;charset=utf-8,' +
+      'data:text/csv;charset=utf-8,\uFEFF' +
       [headers.join(','), ...rows.map((e) => e.join(','))].join('\n');
 
     const encodedUri = encodeURI(csvContent);
@@ -166,11 +260,18 @@ export const ReportsView: React.FC = () => {
     link.setAttribute('href', encodedUri);
     link.setAttribute(
       'download',
-      `Rekap_Presensi_${activeClass?.name || 'Sekolah'}_${reportDates[0]}_sd_${reportDates[reportDates.length - 1]}.csv`
+      `Rekap_Presensi_${activeClass?.name ? activeClass.name.replace(/\s+/g, '_') : 'Sekolah'}_${reportDates[0]}_sd_${reportDates[reportDates.length - 1]}.csv`
     );
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  };
+
+  // Format Month Display Name
+  const formatMonthTitle = (monthStr: string) => {
+    const [y, m] = monthStr.split('-').map(Number);
+    const dateObj = new Date(y, m - 1, 1);
+    return new Intl.DateTimeFormat('id-ID', { month: 'long', year: 'numeric' }).format(dateObj);
   };
 
   return (
@@ -184,35 +285,48 @@ export const ReportsView: React.FC = () => {
               Rekapitulasi & Laporan Presensi Siswa
             </h2>
             <p className="text-xs text-stone-500 dark:text-stone-400 mt-0.5">
-              Rekap kehadiran multi-hari dan format cetak resmi dengan kop surat sekolah
+              Rekap kehadiran harian sesuai tanggal dan bulan dengan pembedaan hari Minggu
             </p>
           </div>
 
           {/* Action Buttons */}
-          <div className="flex flex-wrap items-center gap-2.5 w-full lg:w-auto">
+          <div className="flex flex-wrap items-center gap-2 w-full lg:w-auto">
+            <button
+              id="export-report-excel-button"
+              type="button"
+              onClick={handleExportExcel}
+              className="flex-1 sm:flex-none px-3.5 py-2 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 shadow-2xs active:scale-95 cursor-pointer"
+              title="Unduh format spreadsheet Excel lengkap"
+            >
+              <FileDown className="w-4 h-4" />
+              <span>Ekspor Excel (.xlsx)</span>
+            </button>
+
             <button
               id="export-report-csv-button"
+              type="button"
               onClick={handleExportReportCSV}
-              className="flex-1 sm:flex-none px-3.5 py-2 bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-200 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 border border-stone-200 dark:border-stone-700"
+              className="flex-1 sm:flex-none px-3.5 py-2 bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-200 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 border border-stone-200 dark:border-stone-700 cursor-pointer"
             >
               <Download className="w-4 h-4 text-stone-600 dark:text-stone-400" />
-              <span>Ekspor CSV</span>
+              <span>CSV</span>
             </button>
 
             <button
               id="print-report-button"
+              type="button"
               onClick={handlePrint}
-              className="flex-1 sm:flex-none px-4 py-2 bg-[#4a0404] hover:bg-[#380303] text-white rounded-xl text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-2 active:scale-95"
+              className="flex-1 sm:flex-none px-4 py-2 bg-[#4a0404] hover:bg-[#380303] text-white rounded-xl text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-1.5 active:scale-95 cursor-pointer"
             >
               <Printer className="w-4 h-4" />
-              <span>Cetak Laporan Resmi (PDF)</span>
+              <span>Cetak KOP Resmi (PDF)</span>
             </button>
           </div>
         </div>
 
         {/* Filter Controls */}
         <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-stone-100 dark:border-stone-800">
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2.5">
             {/* Class Selector */}
             <div className="flex items-center gap-2 bg-stone-50 dark:bg-stone-800 px-3 py-1.5 rounded-xl border border-stone-200 dark:border-stone-700 text-xs">
               <Layers className="w-3.5 h-3.5 text-stone-400" />
@@ -233,45 +347,119 @@ export const ReportsView: React.FC = () => {
             </div>
 
             {/* Period Mode Selector */}
-            <div className="flex items-center gap-1 bg-stone-100 dark:bg-stone-800 p-1 rounded-xl border border-stone-200 dark:border-stone-700 text-xs">
+            <div className="flex items-center gap-1 bg-stone-100 dark:bg-stone-800 p-1 rounded-xl border border-stone-200 dark:border-stone-700 text-xs flex-wrap">
               <button
+                type="button"
+                onClick={() => setPeriodMode('monthly')}
+                className={`px-2.5 py-1 rounded-lg font-bold transition-all cursor-pointer ${
+                  periodMode === 'monthly'
+                    ? 'bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100 shadow-2xs'
+                    : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'
+                }`}
+              >
+                1 Bulan Penuh
+              </button>
+              <button
+                type="button"
                 onClick={() => setPeriodMode('weekly')}
-                className={`px-3 py-1 rounded-lg font-bold transition-all ${
+                className={`px-2.5 py-1 rounded-lg font-bold transition-all cursor-pointer ${
                   periodMode === 'weekly'
                     ? 'bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100 shadow-2xs'
-                    : 'text-stone-600 dark:text-stone-400'
+                    : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'
                 }`}
               >
                 7 Hari Terakhir
               </button>
               <button
-                onClick={() => setPeriodMode('monthly')}
-                className={`px-3 py-1 rounded-lg font-bold transition-all ${
-                  periodMode === 'monthly'
+                type="button"
+                onClick={() => setPeriodMode('biweekly_1')}
+                className={`px-2.5 py-1 rounded-lg font-bold transition-all cursor-pointer ${
+                  periodMode === 'biweekly_1'
                     ? 'bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100 shadow-2xs'
-                    : 'text-stone-600 dark:text-stone-400'
+                    : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'
                 }`}
               >
-                Bulanan
+                Tgl 1 - 15
+              </button>
+              <button
+                type="button"
+                onClick={() => setPeriodMode('biweekly_2')}
+                className={`px-2.5 py-1 rounded-lg font-bold transition-all cursor-pointer ${
+                  periodMode === 'biweekly_2'
+                    ? 'bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100 shadow-2xs'
+                    : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'
+                }`}
+              >
+                Tgl 16 - Akhir
+              </button>
+              <button
+                type="button"
+                onClick={() => setPeriodMode('custom')}
+                className={`px-2.5 py-1 rounded-lg font-bold transition-all cursor-pointer ${
+                  periodMode === 'custom'
+                    ? 'bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100 shadow-2xs'
+                    : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'
+                }`}
+              >
+                Kustom
               </button>
             </div>
 
-            {periodMode === 'monthly' && (
-              <input
-                type="month"
-                value={selectedMonth}
-                onChange={(e) => setSelectedMonth(e.target.value)}
-                className="p-1.5 bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 rounded-xl text-xs font-bold text-stone-800 dark:text-white"
-              />
+            {/* Month Picker for Monthly & Biweekly modes */}
+            {periodMode !== 'weekly' && periodMode !== 'custom' && (
+              <div className="flex items-center gap-1.5 bg-stone-50 dark:bg-stone-800 px-2.5 py-1 rounded-xl border border-stone-200 dark:border-stone-700 text-xs">
+                <Calendar className="w-3.5 h-3.5 text-stone-400" />
+                <input
+                  type="month"
+                  value={selectedMonth}
+                  onChange={(e) => setSelectedMonth(e.target.value)}
+                  className="bg-transparent text-xs font-bold text-stone-800 dark:text-white focus:outline-hidden cursor-pointer"
+                />
+              </div>
+            )}
+
+            {/* Custom Range Picker */}
+            {periodMode === 'custom' && (
+              <div className="flex items-center gap-2 bg-stone-50 dark:bg-stone-800 px-3 py-1 rounded-xl border border-stone-200 dark:border-stone-700 text-xs">
+                <input
+                  type="date"
+                  value={customStartDate}
+                  onChange={(e) => setCustomStartDate(e.target.value)}
+                  className="bg-transparent text-xs font-bold text-stone-800 dark:text-white focus:outline-hidden"
+                />
+                <span className="text-stone-400 font-bold">s/d</span>
+                <input
+                  type="date"
+                  value={customEndDate}
+                  onChange={(e) => setCustomEndDate(e.target.value)}
+                  className="bg-transparent text-xs font-bold text-stone-800 dark:text-white focus:outline-hidden"
+                />
+              </div>
             )}
           </div>
 
           {/* Quick Stats Pill */}
-          <div className="flex items-center gap-2 text-xs">
-            <span className="text-stone-400 font-medium">Rata-rata Periode:</span>
+          <div className="flex items-center gap-2 text-xs flex-wrap">
+            <span className="text-stone-400 font-medium">Rata-rata Kehadiran:</span>
             <span className="px-2.5 py-1 rounded-lg bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-extrabold border border-emerald-200 dark:border-emerald-800">
-              {classOverallStats.avgRate}% Hadir
+              {classOverallStats.avgRate}%
             </span>
+          </div>
+        </div>
+
+        {/* Informative summary chips for days and Sundays */}
+        <div className="flex items-center gap-2 pt-2 border-t border-stone-100 dark:border-stone-800 text-[11px] text-stone-500 dark:text-stone-400 flex-wrap">
+          <div className="flex items-center gap-1 bg-stone-100 dark:bg-stone-800 px-2.5 py-1 rounded-lg">
+            <Calendar className="w-3.5 h-3.5 text-stone-500" />
+            <span>Total Hari: <strong>{reportDates.length} Hari</strong></span>
+          </div>
+          <div className="flex items-center gap-1 bg-blue-50 dark:bg-blue-950/40 text-blue-800 dark:text-blue-300 px-2.5 py-1 rounded-lg border border-blue-200 dark:border-blue-800/60">
+            <CheckCircle2 className="w-3.5 h-3.5 text-blue-600" />
+            <span>Hari Efektif Belajar: <strong>{effectiveSchoolDaysCount} Hari</strong></span>
+          </div>
+          <div className="flex items-center gap-1.5 bg-stone-300 dark:bg-stone-950 text-rose-800 dark:text-rose-300 px-2.5 py-1 rounded-lg border border-stone-400 dark:border-stone-700 font-semibold">
+            <span className="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block" />
+            <span>Hari Minggu: <strong>{sundayDates.length} Hari</strong> (Diarsir Gelap)</span>
           </div>
         </div>
       </div>
@@ -281,7 +469,7 @@ export const ReportsView: React.FC = () => {
         id="attendance-printable-report"
         className="print-container bg-white dark:bg-stone-900 rounded-2xl border border-stone-200/80 dark:border-stone-800 shadow-xs p-6 md:p-8 space-y-6"
       >
-        {/* Formal Elementary School KOP Surat Header (Formatted for official Indonesian SD) */}
+        {/* Formal Elementary School KOP Surat Header */}
         <div className="border-b-2 border-stone-900 dark:border-stone-200 pb-4 text-center space-y-1">
           <div className="flex items-center justify-center gap-3">
             <div className="w-12 h-12 rounded-xl bg-[#4a0404] text-white flex items-center justify-center text-xl font-bold">
@@ -306,11 +494,11 @@ export const ReportsView: React.FC = () => {
             NPSN: <strong>{schoolProfile.npsn}</strong> {schoolProfile.nss ? `• NSS: ${schoolProfile.nss}` : ''} • Akreditasi: <strong>{schoolProfile.akreditasi || 'A'}</strong> • Kurikulum: <strong>{schoolProfile.kurikulum || 'Kurikulum Merdeka'}</strong>
           </p>
           <div className="pt-2 text-xs font-bold uppercase tracking-wider text-stone-800 dark:text-stone-200">
-            LAPORAN REKAPITULASI KEHADIRAN SISWA
+            LAPORAN REKAPITULASI KEHADIRAN SISWA BULAN {periodMode === 'monthly' || periodMode === 'biweekly_1' || periodMode === 'biweekly_2' ? formatMonthTitle(selectedMonth).toUpperCase() : 'BERJALAN'}
           </div>
           <div className="text-xs text-stone-600 dark:text-stone-400">
             Kelas: <strong>{activeClass ? activeClass.name : 'Semua Kelas'}</strong> •
-            Periode: <strong>{reportDates[0]} s/d {reportDates[reportDates.length - 1]}</strong> •
+            Periode: <strong>{reportDates[0]} s/d {reportDates[reportDates.length - 1]}</strong> ({reportDates.length} Hari, {effectiveSchoolDaysCount} Hari Efektif) •
             Tahun Ajaran: <strong>{schoolProfile.academicYear} ({schoolProfile.semester})</strong>
           </div>
         </div>
@@ -320,82 +508,113 @@ export const ReportsView: React.FC = () => {
           <table className="w-full text-left border-collapse border border-stone-300 dark:border-stone-700 text-xs">
             <thead>
               <tr className="bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-200 font-bold border-b border-stone-300 dark:border-stone-700 text-[11px]">
-                <th className="py-2.5 px-2 border-r border-stone-300 dark:border-stone-700 text-center w-10">
+                <th className="py-2.5 px-2 border-r border-stone-300 dark:border-stone-700 text-center w-8 shrink-0">
                   No
                 </th>
-                <th className="py-2.5 px-3 border-r border-stone-300 dark:border-stone-700">
+                <th className="py-2.5 px-3 border-r border-stone-300 dark:border-stone-700 min-w-[150px]">
                   Nama Siswa
                 </th>
-                <th className="py-2.5 px-2 border-r border-stone-300 dark:border-stone-700 text-center w-12">
+                <th className="py-2.5 px-1.5 border-r border-stone-300 dark:border-stone-700 text-center w-10 shrink-0">
                   L/P
                 </th>
 
-                {/* Date Columns */}
+                {/* Date Columns: Sundays are darkened */}
                 {reportDates.map((dateStr) => {
-                  const d = new Date(dateStr);
+                  const d = new Date(dateStr + 'T00:00:00');
                   const dayNum = d.getDate();
-                  const dayName = new Intl.DateTimeFormat('id-ID', {
+                  const isSun = isSunday(dateStr);
+                  const dayName = isSun ? 'Min' : new Intl.DateTimeFormat('id-ID', {
                     weekday: 'short',
                   }).format(d);
+
                   return (
                     <th
                       key={dateStr}
-                      className="py-2 px-1.5 border-r border-stone-300 dark:border-stone-700 text-center min-w-[32px]"
-                      title={dateStr}
+                      className={`py-1.5 px-1 border-r text-center min-w-[28px] max-w-[34px] ${
+                        isSun
+                          ? 'sunday-col bg-stone-300 dark:bg-stone-950 text-rose-700 dark:text-rose-400 font-black border-stone-400 dark:border-stone-700 shadow-inner'
+                          : 'border-stone-300 dark:border-stone-700 text-stone-700 dark:text-stone-200'
+                      }`}
+                      title={isSun ? `${dateStr}: Hari Minggu (Libur)` : dateStr}
                     >
-                      <div className="text-[9px] text-stone-500">{dayName}</div>
-                      <div>{dayNum}</div>
+                      <div className={`text-[8.5px] leading-tight ${isSun ? 'text-rose-600 dark:text-rose-400 font-extrabold uppercase' : 'text-stone-500 dark:text-stone-400'}`}>
+                        {dayName}
+                      </div>
+                      <div className={`text-[11px] ${isSun ? 'text-rose-800 dark:text-rose-300 font-black' : 'font-bold'}`}>
+                        {dayNum}
+                      </div>
                     </th>
                   );
                 })}
 
                 {/* Totals */}
-                <th className="py-2.5 px-1.5 border-r border-stone-300 dark:border-stone-700 text-center bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 w-10">
+                <th className="py-2 px-1 border-r border-stone-300 dark:border-stone-700 text-center bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 w-9 shrink-0" title="Hadir">
                   H
                 </th>
-                <th className="py-2.5 px-1.5 border-r border-stone-300 dark:border-stone-700 text-center bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 w-10">
+                <th className="py-2 px-1 border-r border-stone-300 dark:border-stone-700 text-center bg-purple-50 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 w-9 shrink-0" title="Terlambat">
+                  T
+                </th>
+                <th className="py-2 px-1 border-r border-stone-300 dark:border-stone-700 text-center bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 w-9 shrink-0" title="Sakit">
                   S
                 </th>
-                <th className="py-2.5 px-1.5 border-r border-stone-300 dark:border-stone-700 text-center bg-sky-50 dark:bg-sky-950/40 text-sky-700 dark:text-sky-300 w-10">
+                <th className="py-2 px-1 border-r border-stone-300 dark:border-stone-700 text-center bg-sky-50 dark:bg-sky-950/40 text-sky-700 dark:text-sky-300 w-9 shrink-0" title="Izin">
                   I
                 </th>
-                <th className="py-2.5 px-1.5 border-r border-stone-300 dark:border-stone-700 text-center bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 w-10">
+                <th className="py-2 px-1 border-r border-stone-300 dark:border-stone-700 text-center bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 w-9 shrink-0" title="Alpa">
                   A
                 </th>
-                <th className="py-2.5 px-2 text-center bg-stone-200 dark:bg-stone-700 font-extrabold w-14">
+                <th className="py-2 px-1.5 text-center bg-stone-200 dark:bg-stone-700 font-extrabold w-12 shrink-0">
                   %
                 </th>
               </tr>
             </thead>
+
             <tbody className="divide-y divide-stone-200 dark:divide-stone-700">
               {studentMatrix.map((item, idx) => (
                 <tr
                   key={item.student.id}
                   className="hover:bg-stone-50/80 dark:hover:bg-stone-800/40 transition-colors"
                 >
-                  <td className="py-2 px-2 text-center border-r border-stone-200 dark:border-stone-700 font-bold text-stone-400">
+                  <td className="py-2 px-1 text-center border-r border-stone-200 dark:border-stone-700 font-bold text-stone-400 text-[11px]">
                     {idx + 1}
                   </td>
-                  <td className="py-2 px-3 border-r border-stone-200 dark:border-stone-700 font-semibold text-stone-800 dark:text-stone-200">
+                  <td className="py-2 px-2.5 border-r border-stone-200 dark:border-stone-700 font-semibold text-stone-800 dark:text-stone-200 truncate max-w-[180px]">
                     {item.student.name}
                   </td>
-                  <td className="py-2 px-2 text-center border-r border-stone-200 dark:border-stone-700 font-mono text-stone-500">
+                  <td className="py-2 px-1 text-center border-r border-stone-200 dark:border-stone-700 font-mono text-stone-500 text-[11px]">
                     {item.student.gender}
                   </td>
 
                   {/* Status cells per date */}
                   {item.dateStatuses.map((ds) => {
+                    if (ds.isSunday) {
+                      return (
+                        <td
+                          key={ds.date}
+                          className="sunday-col py-1.5 px-0.5 text-center border-r border-stone-300 dark:border-stone-700 bg-stone-200/90 dark:bg-stone-900/90 text-stone-500 dark:text-stone-400 font-extrabold text-[10px]"
+                          title={`${ds.date}: Hari Minggu (Libur)`}
+                        >
+                          {ds.status === 'L' ? (
+                            <span className="text-[9px] font-semibold text-stone-400 dark:text-stone-500">Libur</span>
+                          ) : (
+                            <span className="text-[10px] font-bold text-stone-600 dark:text-stone-300">{ds.status}</span>
+                          )}
+                        </td>
+                      );
+                    }
+
                     const colorMap: Record<string, string> = {
-                      H: 'text-emerald-700 font-bold',
-                      T: 'text-purple-700 font-bold',
-                      S: 'text-amber-700 font-bold bg-amber-50 dark:bg-amber-950/30',
-                      I: 'text-sky-700 font-bold bg-sky-50 dark:bg-sky-950/30',
-                      A: 'text-rose-700 font-bold bg-rose-50 dark:bg-rose-950/30',
+                      H: 'text-emerald-700 dark:text-emerald-400 font-bold',
+                      T: 'text-purple-700 dark:text-purple-400 font-bold bg-purple-50/60 dark:bg-purple-950/30',
+                      S: 'text-amber-700 dark:text-amber-400 font-bold bg-amber-50 dark:bg-amber-950/30',
+                      I: 'text-sky-700 dark:text-sky-400 font-bold bg-sky-50 dark:bg-sky-950/30',
+                      A: 'text-rose-700 dark:text-rose-400 font-bold bg-rose-50 dark:bg-rose-950/30',
                     };
+
                     return (
                       <td
                         key={ds.date}
-                        className={`py-2 px-1 text-center border-r border-stone-200 dark:border-stone-700 font-mono text-[11px] ${
+                        className={`py-1.5 px-0.5 text-center border-r border-stone-200 dark:border-stone-700 font-mono text-[11px] ${
                           colorMap[ds.status] || ''
                         }`}
                         title={`${ds.date}: ${ds.status} ${ds.notes ? `(${ds.notes})` : ''}`}
@@ -406,42 +625,91 @@ export const ReportsView: React.FC = () => {
                   })}
 
                   {/* Summary Totals */}
-                  <td className="py-2 px-1 text-center border-r border-stone-200 dark:border-stone-700 font-bold text-emerald-700 dark:text-emerald-300">
+                  <td className="py-1.5 px-1 text-center border-r border-stone-200 dark:border-stone-700 font-bold text-emerald-700 dark:text-emerald-300 text-[11px]">
                     {item.hCount}
                   </td>
-                  <td className="py-2 px-1 text-center border-r border-stone-200 dark:border-stone-700 font-bold text-amber-700 dark:text-amber-300">
+                  <td className="py-1.5 px-1 text-center border-r border-stone-200 dark:border-stone-700 font-bold text-purple-700 dark:text-purple-300 text-[11px]">
+                    {item.tCount}
+                  </td>
+                  <td className="py-1.5 px-1 text-center border-r border-stone-200 dark:border-stone-700 font-bold text-amber-700 dark:text-amber-300 text-[11px]">
                     {item.sCount}
                   </td>
-                  <td className="py-2 px-1 text-center border-r border-stone-200 dark:border-stone-700 font-bold text-sky-700 dark:text-sky-300">
+                  <td className="py-1.5 px-1 text-center border-r border-stone-200 dark:border-stone-700 font-bold text-sky-700 dark:text-sky-300 text-[11px]">
                     {item.iCount}
                   </td>
-                  <td className="py-2 px-1 text-center border-r border-stone-200 dark:border-stone-700 font-bold text-rose-700 dark:text-rose-300">
+                  <td className="py-1.5 px-1 text-center border-r border-stone-200 dark:border-stone-700 font-bold text-rose-700 dark:text-rose-300 text-[11px]">
                     {item.aCount}
                   </td>
-                  <td className="py-2 px-2 text-center font-extrabold text-stone-800 dark:text-stone-100 bg-stone-50 dark:bg-stone-800">
+                  <td className="py-1.5 px-1 text-center font-extrabold text-stone-800 dark:text-stone-100 bg-stone-50 dark:bg-stone-800 text-[11px]">
                     {item.rate}%
                   </td>
                 </tr>
               ))}
             </tbody>
+
+            {/* Table Footer: Daily Attendance Totals */}
+            <tfoot>
+              <tr className="bg-stone-100 dark:bg-stone-800 text-stone-800 dark:text-stone-200 font-bold border-t-2 border-stone-300 dark:border-stone-700 text-[10px]">
+                <td colSpan={3} className="py-2 px-2 border-r border-stone-300 dark:border-stone-700 text-right font-black uppercase">
+                  Jumlah Hadir:
+                </td>
+                {dailyColumnStats.map((stat, i) => {
+                  if (stat.isSunday) {
+                    return (
+                      <td
+                        key={i}
+                        className="sunday-col py-1 px-0.5 border-r border-stone-300 dark:border-stone-700 text-center bg-stone-300 dark:bg-stone-950 text-stone-500 font-bold"
+                        title="Hari Minggu"
+                      >
+                        -
+                      </td>
+                    );
+                  }
+                  return (
+                    <td
+                      key={i}
+                      className="py-1 px-0.5 border-r border-stone-200 dark:border-stone-700 text-center font-mono font-bold text-emerald-700 dark:text-emerald-400"
+                    >
+                      {stat.presentCount}
+                    </td>
+                  );
+                })}
+                <td colSpan={6} className="py-2 px-2 text-center font-black bg-stone-200 dark:bg-stone-700">
+                  Rata-rata: {classOverallStats.avgRate}%
+                </td>
+              </tr>
+            </tfoot>
           </table>
         </div>
 
         {/* Legend */}
-        <div className="flex flex-wrap items-center gap-4 text-xs pt-2 text-stone-600 dark:text-stone-400">
+        <div className="flex flex-wrap items-center gap-3 text-xs pt-2 text-stone-600 dark:text-stone-400 border-t border-stone-200 dark:border-stone-800">
           <span className="font-bold text-stone-800 dark:text-white">Keterangan:</span>
-          <span><strong>H:</strong> Hadir Tepat Waktu</span>
-          <span><strong>T:</strong> Terlambat</span>
-          <span><strong>S:</strong> Sakit</span>
-          <span><strong>I:</strong> Izin</span>
-          <span><strong>A:</strong> Alpa / Tanpa Keterangan</span>
+          <span className="flex items-center gap-1 font-semibold text-emerald-700 dark:text-emerald-400">
+            <strong>H:</strong> Hadir Tepat Waktu
+          </span>
+          <span className="flex items-center gap-1 font-semibold text-purple-700 dark:text-purple-400">
+            <strong>T:</strong> Terlambat
+          </span>
+          <span className="flex items-center gap-1 font-semibold text-amber-700 dark:text-amber-400">
+            <strong>S:</strong> Sakit
+          </span>
+          <span className="flex items-center gap-1 font-semibold text-sky-700 dark:text-sky-400">
+            <strong>I:</strong> Izin
+          </span>
+          <span className="flex items-center gap-1 font-semibold text-rose-700 dark:text-rose-400">
+            <strong>A:</strong> Alpa
+          </span>
+          <span className="flex items-center gap-1 font-bold text-stone-700 dark:text-stone-300 bg-stone-200 dark:bg-stone-800 px-2 py-0.5 rounded">
+            <strong>Hari Minggu:</strong> Libur Mingguan (Kolom Warna Lebih Gelap)
+          </span>
         </div>
 
         {/* Official Signature Area (Signatures of Principal & Homeroom Teacher) */}
-        <div className="pt-8 grid grid-cols-2 text-center text-xs text-stone-800 dark:text-stone-200 gap-8">
+        <div className="pt-6 grid grid-cols-2 text-center text-xs text-stone-800 dark:text-stone-200 gap-8">
           <div>
             <p>Mengetahui,</p>
-            <p className="font-bold">Kepala SD Negeri 01 Harapan Bangsa</p>
+            <p className="font-bold">Kepala {schoolProfile.name}</p>
             <div className="h-16" />
             <p className="font-extrabold underline">{schoolProfile.principalName}</p>
             <p className="text-[11px] text-stone-500 font-mono">
@@ -450,8 +718,10 @@ export const ReportsView: React.FC = () => {
           </div>
 
           <div>
-            <p>Jakarta, {new Intl.DateTimeFormat('id-ID', { dateStyle: 'long' }).format(new Date())}</p>
-            <p className="font-bold">Guru Wali Kelas</p>
+            <p>
+              {schoolProfile.regency ? schoolProfile.regency.replace(/^(kota|kabupaten|kab\.|kota adm\.)\s*/i, '') : 'Jakarta'}, {new Intl.DateTimeFormat('id-ID', { dateStyle: 'long' }).format(new Date())}
+            </p>
+            <p className="font-bold">Guru Wali Kelas {activeClass ? activeClass.name : ''}</p>
             <div className="h-16" />
             <p className="font-extrabold underline">{activeClass ? activeClass.teacherName : 'Wali Kelas'}</p>
             <p className="text-[11px] text-stone-500 font-mono">
