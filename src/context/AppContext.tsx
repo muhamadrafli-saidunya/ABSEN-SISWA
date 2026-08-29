@@ -90,6 +90,13 @@ interface AppContextType {
   // QR Scanning Simulation Helper
   scanStudentQR: (qrCodeOrNisn: string) => { success: boolean; message: string; student?: Student };
 
+  // Dashboard Size / Layout Controls (Perkecil / Perlebar Dasbor Kanan)
+  dashboardSize: 'full' | 'compact' | 'narrow';
+  setDashboardSize: (size: 'full' | 'compact' | 'narrow') => void;
+  toggleDashboardSize: () => void;
+  dashboardWidthPercent: number;
+  setDashboardWidthPercent: (width: number | ((prev: number) => number)) => void;
+
   // Reset to default
   resetDataToDefault: () => void;
 }
@@ -104,11 +111,60 @@ const STORAGE_KEYS = {
   LEAVE_REQUESTS: 'absensi_sd_leave_requests_v1',
   THEME: 'absensi_sd_theme_v1',
   USER: 'absensi_sd_user_v1',
+  DASHBOARD_SIZE: 'absensi_sd_dashboard_size_v1',
+  DASHBOARD_WIDTH: 'absensi_sd_dashboard_width_v1',
 };
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // Navigation
   const [activeTab, setActiveTab] = useState<NavigationTab>('dashboard');
+
+  // Dashboard Size / Layout State ('full' = 100%, 'compact' = 75%, 'narrow' = 55%)
+  const [dashboardSize, setDashboardSizeState] = useState<'full' | 'compact' | 'narrow'>(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEYS.DASHBOARD_SIZE);
+      if (saved === 'compact' || saved === 'narrow' || saved === 'full') return saved;
+    } catch {}
+    return 'full';
+  });
+
+  const [dashboardWidthPercent, setDashboardWidthPercent] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEYS.DASHBOARD_WIDTH);
+      if (saved) {
+        const num = Number(saved);
+        if (num >= 45 && num <= 100) return num;
+      }
+    } catch {}
+    return 100;
+  });
+
+  const setDashboardSize = (size: 'full' | 'compact' | 'narrow') => {
+    setDashboardSizeState(size);
+    try {
+      localStorage.setItem(STORAGE_KEYS.DASHBOARD_SIZE, size);
+      if (size === 'full') {
+        setDashboardWidthPercent(100);
+        localStorage.setItem(STORAGE_KEYS.DASHBOARD_WIDTH, '100');
+      } else if (size === 'compact') {
+        setDashboardWidthPercent(75);
+        localStorage.setItem(STORAGE_KEYS.DASHBOARD_WIDTH, '75');
+      } else if (size === 'narrow') {
+        setDashboardWidthPercent(55);
+        localStorage.setItem(STORAGE_KEYS.DASHBOARD_WIDTH, '55');
+      }
+    } catch {}
+  };
+
+  const toggleDashboardSize = () => {
+    if (dashboardSize === 'full') {
+      setDashboardSize('compact');
+    } else if (dashboardSize === 'compact') {
+      setDashboardSize('narrow');
+    } else {
+      setDashboardSize('full');
+    }
+  };
 
   // Dark Mode State
   const [darkMode, setDarkMode] = useState<boolean>(() => {
@@ -716,6 +772,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         addToast,
         removeToast,
         scanStudentQR,
+        dashboardSize,
+        setDashboardSize,
+        toggleDashboardSize,
+        dashboardWidthPercent,
+        setDashboardWidthPercent,
         resetDataToDefault,
       }}
     >

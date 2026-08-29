@@ -15,6 +15,8 @@ import {
   PhoneCall,
   ChevronRight,
   Sparkles,
+  Minimize2,
+  Maximize2,
 } from 'lucide-react';
 import {
   ResponsiveContainer,
@@ -42,6 +44,9 @@ export const DashboardView: React.FC = () => {
     setSelectedClassId,
     onOpenQRScanner,
     leaveRequests,
+    dashboardSize,
+    setDashboardSize,
+    toggleDashboardSize,
   } = useApp() as any;
 
   // Filter students by selected class if not 'all'
@@ -191,7 +196,7 @@ export const DashboardView: React.FC = () => {
   }, [students, attendanceRecords]);
 
   return (
-    <div className="space-y-6 pb-12 animate-in fade-in duration-300">
+    <div className="p-4 sm:p-6 md:p-7 rounded-3xl bg-[#fdf2f2] dark:bg-[#180505] border border-rose-200/80 dark:border-rose-950/70 space-y-6 pb-12 animate-in fade-in duration-300 shadow-xs">
       {/* Top Welcome Banner with Maroon Motif */}
       <div className="rounded-2xl bg-gradient-to-r from-[#4a0404] via-[#5c0606] to-[#3b0303] text-white p-6 md:p-7 shadow-sm relative overflow-hidden border border-[#5c0606]">
         <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
@@ -209,7 +214,7 @@ export const DashboardView: React.FC = () => {
           </div>
 
           {/* Quick Actions Buttons */}
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2.5">
             <button
               id="dashboard-start-attendance-button"
               onClick={() => setActiveTab('presensi-harian')}
@@ -226,6 +231,26 @@ export const DashboardView: React.FC = () => {
             >
               <FileSpreadsheet className="w-4 h-4 text-amber-300" />
               <span>Rekap Laporan</span>
+            </button>
+
+            {/* Quick Shrink / Expand Button */}
+            <button
+              id="dashboard-shrink-toggle-button"
+              onClick={toggleDashboardSize}
+              className="px-3.5 py-2.5 rounded-xl bg-white/15 hover:bg-white/25 border border-white/20 text-white font-bold text-xs transition-all shadow-xs flex items-center gap-1.5 active:scale-95"
+              title="Perkecil atau perbesar lebar tampilan dasbor sebelah kanan"
+            >
+              {dashboardSize === 'full' ? (
+                <>
+                  <Minimize2 className="w-4 h-4 text-amber-300" />
+                  <span>Perkecil Dasbor</span>
+                </>
+              ) : (
+                <>
+                  <Maximize2 className="w-4 h-4 text-amber-300" />
+                  <span>Perbesar Penuh</span>
+                </>
+              )}
             </button>
           </div>
         </div>

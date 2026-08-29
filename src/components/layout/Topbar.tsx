@@ -11,6 +11,9 @@ import {
   Layers,
   Sparkles,
   Check,
+  Minimize2,
+  Maximize2,
+  FoldHorizontal,
 } from 'lucide-react';
 
 interface TopbarProps {
@@ -36,9 +39,13 @@ export const Topbar: React.FC<TopbarProps> = ({
     markNotificationAsRead,
     clearAllNotifications,
     setActiveTab,
+    dashboardSize,
+    setDashboardSize,
+    toggleDashboardSize,
   } = useApp();
 
   const [showNotifications, setShowNotifications] = useState(false);
+  const [showSizeMenu, setShowSizeMenu] = useState(false);
 
   const unreadCount = notifications.filter((n) => !n.read).length;
 
@@ -242,6 +249,35 @@ export const Topbar: React.FC<TopbarProps> = ({
               </div>
             </div>
           )}
+        </div>
+
+        {/* Dashboard Width / Minimize Toggle */}
+        <div className="relative">
+          <button
+            id="topbar-shrink-dashboard-button"
+            onClick={toggleDashboardSize}
+            className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border text-xs font-bold transition-all active:scale-95 ${
+              dashboardSize !== 'full'
+                ? 'bg-rose-50 dark:bg-rose-950/50 border-[#4a0404] text-[#4a0404] dark:text-rose-300 shadow-2xs'
+                : 'text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 border-stone-200/80 dark:border-stone-700/80'
+            }`}
+            title={
+              dashboardSize === 'full'
+                ? 'Perkecil Tampilan Dasbor (Mode Kompak)'
+                : dashboardSize === 'compact'
+                ? 'Perkecil Lebih Lanjut (Mode Ramping)'
+                : 'Kembalikan Ukuran Dasbor (Mode Penuh)'
+            }
+          >
+            {dashboardSize === 'full' ? (
+              <Minimize2 className="w-4 h-4 text-stone-600 dark:text-stone-300" />
+            ) : (
+              <Maximize2 className="w-4 h-4 text-[#4a0404] dark:text-rose-400" />
+            )}
+            <span className="hidden lg:inline font-semibold text-xs">
+              {dashboardSize === 'full' ? 'Perkecil Dasbor' : dashboardSize === 'compact' ? 'Ukuran: 75%' : 'Ukuran: 55%'}
+            </span>
+          </button>
         </div>
 
         {/* Dark Mode Switcher */}
