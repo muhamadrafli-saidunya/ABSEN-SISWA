@@ -116,13 +116,13 @@ export const ClassMasterView: React.FC = () => {
   return (
     <div className="space-y-6 pb-12 animate-in fade-in duration-300">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-6 rounded-2xl bg-white dark:bg-stone-900 border border-stone-200/80 dark:border-stone-800 shadow-xs">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-6 rounded-2xl bg-white/90 dark:bg-slate-900 border border-sky-200/80 dark:border-sky-900/60 shadow-xs">
         <div>
-          <h2 className="text-lg font-bold text-stone-900 dark:text-white flex items-center gap-2">
-            <GraduationCap className="w-5 h-5 text-[#4a0404] dark:text-rose-400" />
+          <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <GraduationCap className="w-5 h-5 text-sky-600 dark:text-sky-400" />
             Data Rombongan Belajar (Kelas) & Wali Kelas
           </h2>
-          <p className="text-xs text-stone-500 dark:text-stone-400 mt-0.5">
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
             Manajemen kelas tingkat 1 sampai 6 beserta penugasan guru wali kelas
           </p>
         </div>
@@ -151,7 +151,7 @@ export const ClassMasterView: React.FC = () => {
           <button
             id="export-classes-excel-btn"
             onClick={() => exportClassesToExcel(classes, students)}
-            className="flex-1 sm:flex-none px-3.5 py-2 bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-200 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2"
+            className="flex-1 sm:flex-none px-3.5 py-2 bg-sky-50 hover:bg-sky-100 dark:bg-slate-800 dark:hover:bg-slate-700 text-sky-800 dark:text-sky-200 border border-sky-200 dark:border-slate-700 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer"
             title="Download Master Data Rombel Kelas format .xlsx"
           >
             <FileSpreadsheet className="w-4 h-4 text-emerald-600" />
@@ -161,7 +161,7 @@ export const ClassMasterView: React.FC = () => {
           <button
             id="add-class-button"
             onClick={handleOpenAdd}
-            className="flex-1 sm:flex-none px-3.5 py-2 bg-[#4a0404] hover:bg-[#380303] text-white rounded-xl text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-2 active:scale-95 cursor-pointer"
+            className="flex-1 sm:flex-none px-3.5 py-2 bg-sky-600 hover:bg-sky-700 text-white rounded-xl text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-2 active:scale-95 cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             <span>Tambah Kelas</span>
@@ -176,20 +176,20 @@ export const ClassMasterView: React.FC = () => {
           return (
             <div
               key={cls.id}
-              className="rounded-2xl bg-white dark:bg-stone-900 border border-stone-200/80 dark:border-stone-800 shadow-xs overflow-hidden flex flex-col justify-between group hover:border-[#4a0404]/30 dark:hover:border-rose-900/60 transition-all hover:shadow-xs"
+              className="rounded-2xl bg-white dark:bg-slate-900 border border-sky-200/80 dark:border-sky-900/60 shadow-xs overflow-hidden flex flex-col justify-between group hover:border-sky-400 dark:hover:border-sky-600 transition-all hover:shadow-xs"
             >
               {/* Card Top */}
               <div className="p-4 space-y-3.5">
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-stone-100 dark:bg-stone-800 text-stone-800 dark:text-stone-200 flex items-center justify-center font-black text-xs border border-stone-200/80 dark:border-stone-700">
+                    <div className="w-10 h-10 rounded-xl bg-sky-100 dark:bg-slate-800 text-sky-800 dark:text-sky-300 flex items-center justify-center font-black text-xs border border-sky-200/80 dark:border-slate-700">
                       {cls.name.replace('Kelas ', '')}
                     </div>
                     <div>
-                      <h3 className="font-bold text-sm text-stone-900 dark:text-white">
+                      <h3 className="font-bold text-sm text-slate-900 dark:text-white">
                         {cls.name}
                       </h3>
-                      <span className="text-[11px] font-semibold text-stone-400 flex items-center gap-1">
+                      <span className="text-[11px] font-semibold text-slate-400 flex items-center gap-1">
                         <Building className="w-3 h-3" /> {cls.roomNumber}
                       </span>
                     </div>
@@ -198,14 +198,14 @@ export const ClassMasterView: React.FC = () => {
                   <div className="flex items-center gap-0.5">
                     <button
                       onClick={() => handleOpenEdit(cls)}
-                      className="p-1.5 text-stone-400 hover:text-amber-600 rounded-lg hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors"
+                      className="p-1.5 text-slate-400 hover:text-amber-600 rounded-lg hover:bg-sky-50 dark:hover:bg-slate-800 transition-colors cursor-pointer"
                       title="Edit Kelas"
                     >
                       <Edit2 className="w-3.5 h-3.5" />
                     </button>
                     <button
                       onClick={() => setDeletingClass(cls)}
-                      className="p-1.5 text-stone-400 hover:text-rose-600 rounded-lg hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors"
+                      className="p-1.5 text-slate-400 hover:text-rose-600 rounded-lg hover:bg-rose-50 dark:hover:bg-slate-800 transition-colors cursor-pointer"
                       title="Hapus Kelas"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
@@ -214,25 +214,25 @@ export const ClassMasterView: React.FC = () => {
                 </div>
 
                 {/* Teacher Info */}
-                <div className="p-3 bg-stone-50 dark:bg-stone-800/50 rounded-xl border border-stone-100 dark:border-stone-800">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-stone-400">
+                <div className="p-3 bg-sky-50/50 dark:bg-slate-800/50 rounded-xl border border-sky-100 dark:border-slate-800">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-sky-700 dark:text-sky-300">
                     Guru Wali Kelas:
                   </span>
-                  <p className="font-bold text-xs text-stone-800 dark:text-white mt-0.5 truncate">
+                  <p className="font-bold text-xs text-slate-800 dark:text-white mt-0.5 truncate">
                     {cls.teacherName}
                   </p>
-                  <p className="text-[10px] font-mono text-stone-400 mt-0.5">
+                  <p className="text-[10px] font-mono text-slate-400 mt-0.5">
                     NIP: {cls.teacherNip || '-'}
                   </p>
                 </div>
 
                 {/* Stats */}
                 <div className="grid grid-cols-2 gap-2">
-                  <div className="p-2.5 rounded-xl bg-stone-50 dark:bg-stone-800/40 text-center border border-stone-100 dark:border-stone-800">
-                    <span className="text-[10px] font-semibold text-stone-400 block">
+                  <div className="p-2.5 rounded-xl bg-sky-50/40 dark:bg-slate-800/40 text-center border border-sky-100 dark:border-slate-800">
+                    <span className="text-[10px] font-semibold text-slate-400 block">
                       Jumlah Siswa
                     </span>
-                    <span className="text-xs font-bold text-stone-800 dark:text-white">
+                    <span className="text-xs font-bold text-slate-800 dark:text-white">
                       {stats.studentCount} Siswa
                     </span>
                   </div>
@@ -248,13 +248,13 @@ export const ClassMasterView: React.FC = () => {
               </div>
 
               {/* Card Footer Button */}
-              <div className="p-3 bg-stone-50/60 dark:bg-stone-800/30 border-t border-stone-100 dark:border-stone-800">
+              <div className="p-3 bg-sky-50/60 dark:bg-slate-800/30 border-t border-sky-100 dark:border-slate-800">
                 <button
                   onClick={() => {
                     setSelectedClassId(cls.id);
                     setActiveTab('presensi-harian');
                   }}
-                  className="w-full py-1.5 bg-white dark:bg-stone-800 hover:bg-[#4a0404] hover:text-white dark:hover:bg-[#4a0404] dark:hover:text-white text-stone-700 dark:text-stone-300 border border-stone-200 dark:border-stone-700 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 shadow-2xs"
+                  className="w-full py-1.5 bg-white dark:bg-slate-800 hover:bg-sky-600 hover:text-white dark:hover:bg-sky-600 dark:hover:text-white text-slate-700 dark:text-slate-300 border border-sky-200 dark:border-slate-700 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 shadow-2xs cursor-pointer"
                 >
                   <span>Buka Presensi Kelas</span>
                   <ChevronRight className="w-3.5 h-3.5" />
@@ -282,7 +282,7 @@ export const ClassMasterView: React.FC = () => {
             className="space-y-4"
           >
             <div>
-              <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                 Nama Kelas: *
               </label>
               <input
@@ -291,13 +291,13 @@ export const ClassMasterView: React.FC = () => {
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 placeholder="Contoh: Kelas 2B"
-                className="w-full p-2.5 bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 rounded-xl text-xs font-bold focus:ring-1 focus:ring-[#4a0404] text-stone-900 dark:text-white"
+                className="w-full p-2.5 bg-sky-50/50 dark:bg-slate-800 border border-sky-200 dark:border-slate-700 rounded-xl text-xs font-bold focus:ring-1 focus:ring-sky-500 text-slate-900 dark:text-white"
               />
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                   Tingkat (1 - 6):
                 </label>
                 <select
@@ -305,7 +305,7 @@ export const ClassMasterView: React.FC = () => {
                   onChange={(e) =>
                     setFormData({ ...formData, grade: Number(e.target.value) })
                   }
-                  className="w-full p-2.5 bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 rounded-xl text-xs font-bold focus:ring-1 focus:ring-[#4a0404] text-stone-900 dark:text-white"
+                  className="w-full p-2.5 bg-sky-50/50 dark:bg-slate-800 border border-sky-200 dark:border-slate-700 rounded-xl text-xs font-bold focus:ring-1 focus:ring-sky-500 text-slate-900 dark:text-white"
                 >
                   {[1, 2, 3, 4, 5, 6].map((g) => (
                     <option key={g} value={g}>
@@ -316,7 +316,7 @@ export const ClassMasterView: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                   Nomor Ruangan:
                 </label>
                 <input
@@ -326,13 +326,13 @@ export const ClassMasterView: React.FC = () => {
                     setFormData({ ...formData, roomNumber: e.target.value })
                   }
                   placeholder="Contoh: R. 104"
-                  className="w-full p-2.5 bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 rounded-xl text-xs focus:ring-1 focus:ring-[#4a0404] text-stone-900 dark:text-white"
+                  className="w-full p-2.5 bg-sky-50/50 dark:bg-slate-800 border border-sky-200 dark:border-slate-700 rounded-xl text-xs focus:ring-1 focus:ring-sky-500 text-slate-900 dark:text-white"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                 Nama Guru Wali Kelas: *
               </label>
               <input
@@ -343,12 +343,12 @@ export const ClassMasterView: React.FC = () => {
                   setFormData({ ...formData, teacherName: e.target.value })
                 }
                 placeholder="Contoh: Ibu Siti Aminah, S.Pd."
-                className="w-full p-2.5 bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 rounded-xl text-xs font-semibold focus:ring-1 focus:ring-[#4a0404] text-stone-900 dark:text-white"
+                className="w-full p-2.5 bg-sky-50/50 dark:bg-slate-800 border border-sky-200 dark:border-slate-700 rounded-xl text-xs font-semibold focus:ring-1 focus:ring-sky-500 text-slate-900 dark:text-white"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                 NIP Wali Kelas:
               </label>
               <input
@@ -358,24 +358,24 @@ export const ClassMasterView: React.FC = () => {
                   setFormData({ ...formData, teacherNip: e.target.value })
                 }
                 placeholder="19850412 201001 2 015"
-                className="w-full p-2.5 bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 rounded-xl text-xs font-mono focus:ring-1 focus:ring-[#4a0404] text-stone-900 dark:text-white"
+                className="w-full p-2.5 bg-sky-50/50 dark:bg-slate-800 border border-sky-200 dark:border-slate-700 rounded-xl text-xs font-mono focus:ring-1 focus:ring-sky-500 text-slate-900 dark:text-white"
               />
             </div>
 
-            <div className="flex justify-end gap-2 pt-3 border-t border-stone-100 dark:border-stone-800">
+            <div className="flex justify-end gap-2 pt-3 border-t border-sky-100 dark:border-slate-800">
               <button
                 type="button"
                 onClick={() => {
                   setIsAddModalOpen(false);
                   setEditingClass(null);
                 }}
-                className="px-4 py-2 bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 rounded-xl text-xs font-semibold"
+                className="px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-xl text-xs font-semibold cursor-pointer"
               >
                 Batal
               </button>
               <button
                 type="submit"
-                className="px-5 py-2 bg-[#4a0404] hover:bg-[#380303] text-white rounded-xl text-xs font-bold transition-all shadow-xs"
+                className="px-5 py-2 bg-sky-600 hover:bg-sky-700 text-white rounded-xl text-xs font-bold transition-all shadow-xs cursor-pointer"
               >
                 {isAddModalOpen ? 'Simpan Kelas' : 'Perbarui Kelas'}
               </button>
@@ -393,9 +393,9 @@ export const ClassMasterView: React.FC = () => {
           maxWidth="sm"
         >
           <div className="space-y-4">
-            <p className="text-xs text-stone-600 dark:text-stone-300 leading-relaxed">
+            <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
               Apakah Anda yakin ingin menghapus{' '}
-              <strong className="text-stone-900 dark:text-white">
+              <strong className="text-slate-900 dark:text-white">
                 {deletingClass.name}
               </strong>
               ? Pastikan siswa telah dimutasi ke rombel lain sebelum menghapus.
@@ -404,13 +404,13 @@ export const ClassMasterView: React.FC = () => {
             <div className="flex justify-end gap-2 pt-2">
               <button
                 onClick={() => setDeletingClass(null)}
-                className="px-4 py-2 bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 rounded-xl text-xs font-semibold"
+                className="px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-xl text-xs font-semibold cursor-pointer"
               >
                 Batal
               </button>
               <button
                 onClick={handleConfirmDelete}
-                className="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold"
+                className="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold cursor-pointer"
               >
                 Hapus
               </button>

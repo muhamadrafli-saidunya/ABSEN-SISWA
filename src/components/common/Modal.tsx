@@ -46,23 +46,23 @@ export const Modal: React.FC<ModalProps> = ({
   return (
     <div
       id="modal-backdrop"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-900/50 backdrop-blur-xs animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-200"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
       <div
         id="modal-container"
-        className={`w-full ${maxWidthClasses[maxWidth]} bg-white dark:bg-stone-900 rounded-2xl shadow-xl border border-stone-200 dark:border-stone-800 overflow-hidden flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-200`}
+        className={`w-full ${maxWidthClasses[maxWidth]} bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-sky-200 dark:border-sky-900/60 overflow-hidden flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-200`}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-stone-100 dark:border-stone-800 bg-stone-50/50 dark:bg-stone-900/50">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-sky-100 dark:border-slate-800 bg-sky-50/60 dark:bg-slate-900/80">
           <div>
-            <h3 className="text-base font-bold text-stone-900 dark:text-white">
+            <h3 className="text-base font-bold text-slate-900 dark:text-white">
               {title}
             </h3>
             {subtitle && (
-              <p className="text-xs text-stone-500 dark:text-stone-400 mt-0.5">
+              <p className="text-xs text-sky-800/80 dark:text-sky-300/80 mt-0.5">
                 {subtitle}
               </p>
             )}
@@ -70,7 +70,7 @@ export const Modal: React.FC<ModalProps> = ({
           <button
             id="modal-close-button"
             onClick={onClose}
-            className="p-1.5 rounded-lg text-stone-400 hover:text-stone-600 hover:bg-stone-100 dark:hover:bg-stone-800 dark:hover:text-stone-200 transition-colors"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-sky-100/60 dark:hover:bg-slate-800 dark:hover:text-slate-200 transition-colors cursor-pointer"
             title="Tutup (Esc)"
           >
             <X className="w-5 h-5" />

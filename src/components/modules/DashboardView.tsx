@@ -196,19 +196,19 @@ export const DashboardView: React.FC = () => {
   }, [students, attendanceRecords]);
 
   return (
-    <div className="p-4 sm:p-6 md:p-7 rounded-3xl bg-[#fdf2f2] dark:bg-[#180505] border border-rose-200/80 dark:border-rose-950/70 space-y-6 pb-12 animate-in fade-in duration-300 shadow-xs">
-      {/* Top Welcome Banner with Maroon Motif */}
-      <div className="rounded-2xl bg-gradient-to-r from-[#4a0404] via-[#5c0606] to-[#3b0303] text-white p-6 md:p-7 shadow-sm relative overflow-hidden border border-[#5c0606]">
+    <div className="p-4 sm:p-6 md:p-7 rounded-3xl bg-[#edf6fc] dark:bg-[#0c182c] border border-sky-200/80 dark:border-sky-900/70 space-y-6 pb-12 animate-in fade-in duration-300 shadow-xs">
+      {/* Top Welcome Banner with Light Blue Gradient */}
+      <div className="rounded-2xl bg-gradient-to-r from-sky-600 via-sky-500 to-blue-700 text-white p-6 md:p-7 shadow-sm relative overflow-hidden border border-sky-400/40">
         <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
           <div className="space-y-2 max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-white/15 text-[11px] font-semibold text-rose-100 border border-white/10">
+            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-white/20 text-[11px] font-semibold text-sky-50 border border-white/20">
               <Sparkles className="w-3.5 h-3.5 text-amber-300" />
               Sistem Informasi Presensi Digital Terpadu
             </div>
             <h2 className="text-xl md:text-2xl font-bold tracking-tight text-white">
               Rekapitulasi Kehadiran Akurat & Cepat
             </h2>
-            <p className="text-rose-100 text-xs md:text-sm leading-relaxed">
+            <p className="text-sky-100 text-xs md:text-sm leading-relaxed">
               Pencatatan presensi harian, pemindaian kartu QR siswa otomatis, dan rekapitulasi data siap cetak untuk pelaporan sekolah dasar.
             </p>
           </div>
@@ -218,7 +218,7 @@ export const DashboardView: React.FC = () => {
             <button
               id="dashboard-start-attendance-button"
               onClick={() => setActiveTab('presensi-harian')}
-              className="px-4 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-stone-950 font-bold text-xs transition-all shadow-xs flex items-center gap-2 active:scale-95"
+              className="px-4 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-xs transition-all shadow-xs flex items-center gap-2 active:scale-95"
             >
               <ClipboardList className="w-4 h-4" />
               <span>Input Presensi Hari Ini</span>
@@ -227,7 +227,7 @@ export const DashboardView: React.FC = () => {
             <button
               id="dashboard-open-reports-button"
               onClick={() => setActiveTab('rekap-laporan')}
-              className="px-4 py-2.5 rounded-xl bg-[#6b0909] hover:bg-[#7e0d0d] border border-rose-400/30 text-white font-bold text-xs transition-all shadow-xs flex items-center gap-2 active:scale-95"
+              className="px-4 py-2.5 rounded-xl bg-sky-700/90 hover:bg-sky-800 border border-sky-300/40 text-white font-bold text-xs transition-all shadow-xs flex items-center gap-2 active:scale-95"
             >
               <FileSpreadsheet className="w-4 h-4 text-amber-300" />
               <span>Rekap Laporan</span>
@@ -237,7 +237,7 @@ export const DashboardView: React.FC = () => {
             <button
               id="dashboard-shrink-toggle-button"
               onClick={toggleDashboardSize}
-              className="px-3.5 py-2.5 rounded-xl bg-white/15 hover:bg-white/25 border border-white/20 text-white font-bold text-xs transition-all shadow-xs flex items-center gap-1.5 active:scale-95"
+              className="px-3.5 py-2.5 rounded-xl bg-white/20 hover:bg-white/30 border border-white/25 text-white font-bold text-xs transition-all shadow-xs flex items-center gap-1.5 active:scale-95"
               title="Perkecil atau perbesar lebar tampilan dasbor sebelah kanan"
             >
               {dashboardSize === 'full' ? (
@@ -258,13 +258,13 @@ export const DashboardView: React.FC = () => {
 
       {/* KPI Cards Grid */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3.5">
-        {/* KPI 1: Rate (Hero Maroon Card) */}
-        <div className="p-4 rounded-2xl bg-gradient-to-br from-[#4a0404] to-[#380303] text-white border border-[#5c0606] shadow-sm flex flex-col justify-between">
+        {/* KPI 1: Rate (Hero Sky Blue Card) */}
+        <div className="p-4 rounded-2xl bg-gradient-to-br from-sky-600 to-blue-700 text-white border border-sky-400/40 shadow-sm flex flex-col justify-between">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-rose-200">
+            <span className="text-xs font-bold text-sky-100">
               Tingkat Hadir
             </span>
-            <div className="w-8 h-8 rounded-lg bg-white/15 flex items-center justify-center text-amber-300">
+            <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center text-amber-300">
               <TrendingUp className="w-4 h-4" />
             </div>
           </div>
@@ -279,29 +279,29 @@ export const DashboardView: React.FC = () => {
         </div>
 
         {/* KPI 2: Total Siswa */}
-        <div className="p-4 rounded-2xl bg-white dark:bg-stone-900 border-2 border-rose-100 dark:border-rose-950/60 hover:border-[#4a0404] shadow-xs flex flex-col justify-between transition-colors">
+        <div className="p-4 rounded-2xl bg-white/90 dark:bg-slate-900 border-2 border-sky-200 dark:border-sky-900/70 hover:border-sky-500 shadow-xs flex flex-col justify-between transition-colors">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-[#4a0404] dark:text-rose-300">
+            <span className="text-xs font-bold text-sky-900 dark:text-sky-300">
               Total Siswa
             </span>
-            <div className="w-8 h-8 rounded-lg bg-rose-50 dark:bg-rose-950/60 flex items-center justify-center text-[#4a0404] dark:text-rose-400">
+            <div className="w-8 h-8 rounded-lg bg-sky-100 dark:bg-sky-950/70 flex items-center justify-center text-sky-700 dark:text-sky-300">
               <Users className="w-4 h-4" />
             </div>
           </div>
           <div className="mt-3">
-            <div className="text-2xl font-black text-stone-900 dark:text-white">
+            <div className="text-2xl font-black text-slate-900 dark:text-white">
               {todayAttendance.total}
             </div>
-            <p className="text-[11px] text-[#4a0404] dark:text-rose-400 font-bold mt-0.5">
+            <p className="text-[11px] text-sky-700 dark:text-sky-400 font-bold mt-0.5">
               Siswa Terdaftar
             </p>
           </div>
         </div>
 
         {/* KPI 3: Hadir */}
-        <div className="p-4 rounded-2xl bg-white dark:bg-stone-900 border border-stone-200/80 dark:border-stone-800 hover:border-emerald-500/40 shadow-xs flex flex-col justify-between transition-colors">
+        <div className="p-4 rounded-2xl bg-white/90 dark:bg-slate-900 border border-sky-200/80 dark:border-sky-900/60 hover:border-emerald-500/40 shadow-xs flex flex-col justify-between transition-colors">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-stone-600 dark:text-stone-300">
+            <span className="text-xs font-bold text-slate-700 dark:text-slate-300">
               Hadir Tepat
             </span>
             <div className="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-950/60 flex items-center justify-center text-emerald-600">
@@ -312,16 +312,16 @@ export const DashboardView: React.FC = () => {
             <div className="text-2xl font-black text-emerald-600 dark:text-emerald-400">
               {todayAttendance.hadir}
             </div>
-            <p className="text-[11px] text-stone-500 dark:text-stone-400 font-medium mt-0.5">
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium mt-0.5">
               Tepat Waktu
             </p>
           </div>
         </div>
 
         {/* KPI 4: Terlambat */}
-        <div className="p-4 rounded-2xl bg-white dark:bg-stone-900 border border-stone-200/80 dark:border-stone-800 hover:border-amber-500/40 shadow-xs flex flex-col justify-between transition-colors">
+        <div className="p-4 rounded-2xl bg-white/90 dark:bg-slate-900 border border-sky-200/80 dark:border-sky-900/60 hover:border-amber-500/40 shadow-xs flex flex-col justify-between transition-colors">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-stone-600 dark:text-stone-300">
+            <span className="text-xs font-bold text-slate-700 dark:text-slate-300">
               Terlambat
             </span>
             <div className="w-8 h-8 rounded-lg bg-amber-50 dark:bg-amber-950/60 flex items-center justify-center text-amber-600">
@@ -332,36 +332,36 @@ export const DashboardView: React.FC = () => {
             <div className="text-2xl font-black text-amber-600 dark:text-amber-400">
               {todayAttendance.terlambat}
             </div>
-            <p className="text-[11px] text-stone-500 dark:text-stone-400 font-medium mt-0.5">
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium mt-0.5">
               Masuk &gt; 07:15
             </p>
           </div>
         </div>
 
         {/* KPI 5: Sakit / Izin */}
-        <div className="p-4 rounded-2xl bg-white dark:bg-stone-900 border border-stone-200/80 dark:border-stone-800 hover:border-blue-500/40 shadow-xs flex flex-col justify-between transition-colors">
+        <div className="p-4 rounded-2xl bg-white/90 dark:bg-slate-900 border border-sky-200/80 dark:border-sky-900/60 hover:border-sky-500/40 shadow-xs flex flex-col justify-between transition-colors">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-stone-600 dark:text-stone-300">
+            <span className="text-xs font-bold text-slate-700 dark:text-slate-300">
               Sakit / Izin
             </span>
-            <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-950/60 flex items-center justify-center text-blue-600">
+            <div className="w-8 h-8 rounded-lg bg-sky-100 dark:bg-sky-950/60 flex items-center justify-center text-sky-600 dark:text-sky-400">
               <AlertTriangle className="w-4 h-4" />
             </div>
           </div>
           <div className="mt-3">
-            <div className="text-2xl font-black text-blue-600 dark:text-blue-400">
+            <div className="text-2xl font-black text-sky-600 dark:text-sky-400">
               {todayAttendance.sakit + todayAttendance.izin}
             </div>
-            <p className="text-[11px] text-stone-500 dark:text-stone-400 font-medium mt-0.5">
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium mt-0.5">
               {todayAttendance.sakit} Sakit, {todayAttendance.izin} Izin
             </p>
           </div>
         </div>
 
         {/* KPI 6: Alpa */}
-        <div className="p-4 rounded-2xl bg-white dark:bg-stone-900 border-2 border-rose-200/80 dark:border-rose-950/80 hover:border-[#4a0404] shadow-xs flex flex-col justify-between transition-colors">
+        <div className="p-4 rounded-2xl bg-white/90 dark:bg-slate-900 border-2 border-rose-200 dark:border-rose-950/80 hover:border-rose-400 shadow-xs flex flex-col justify-between transition-colors">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-[#4a0404] dark:text-rose-300">
+            <span className="text-xs font-bold text-rose-700 dark:text-rose-300">
               Tanpa Keterangan
             </span>
             <div className="w-8 h-8 rounded-lg bg-rose-50 dark:bg-rose-950/60 flex items-center justify-center text-rose-600">
@@ -372,7 +372,7 @@ export const DashboardView: React.FC = () => {
             <div className="text-2xl font-black text-rose-600 dark:text-rose-400">
               {todayAttendance.alpa}
             </div>
-            <p className="text-[11px] text-stone-500 dark:text-stone-400 font-medium mt-0.5">
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium mt-0.5">
               Alpa / Belum Absen
             </p>
           </div>
@@ -382,18 +382,18 @@ export const DashboardView: React.FC = () => {
       {/* Analytics Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Donut Chart: Attendance Status Breakdown */}
-        <div className="p-6 rounded-2xl bg-white dark:bg-stone-900 border border-stone-200/80 dark:border-stone-800 shadow-xs">
+        <div className="p-6 rounded-2xl bg-white/90 dark:bg-slate-900 border border-sky-200/80 dark:border-sky-900/60 shadow-xs">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h3 className="font-bold text-sm text-stone-900 dark:text-white flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-[#4a0404]"></span>
+              <h3 className="font-bold text-sm text-slate-900 dark:text-white flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-sky-600"></span>
                 Distribusi Status Kehadiran
               </h3>
-              <p className="text-xs text-stone-500 dark:text-stone-400">
+              <p className="text-xs text-sky-800/80 dark:text-sky-300/80">
                 Komposisi kehadiran siswa hari ini
               </p>
             </div>
-            <span className="text-xs font-bold text-white bg-[#4a0404] px-2.5 py-1 rounded-md shadow-2xs">
+            <span className="text-xs font-bold text-white bg-sky-600 px-2.5 py-1 rounded-md shadow-2xs">
               {todayAttendance.total} Siswa
             </span>
           </div>
@@ -421,41 +421,41 @@ export const DashboardView: React.FC = () => {
                 </PieChart>
               </ResponsiveContainer>
             ) : (
-              <div className="text-xs text-stone-400">Belum ada data presensi</div>
+              <div className="text-xs text-slate-400">Belum ada data presensi</div>
             )}
             <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-              <span className="text-2xl font-black text-[#4a0404] dark:text-rose-400">
+              <span className="text-2xl font-black text-sky-600 dark:text-sky-400">
                 {todayAttendance.rate}%
               </span>
-              <span className="text-[10px] font-bold text-stone-500 uppercase tracking-wider">
+              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
                 Hadir
               </span>
             </div>
           </div>
 
           {/* Legend Items */}
-          <div className="grid grid-cols-2 gap-2 mt-4 pt-4 border-t border-stone-100 dark:border-stone-800">
+          <div className="grid grid-cols-2 gap-2 mt-4 pt-4 border-t border-sky-100 dark:border-sky-900/60">
             <div className="flex items-center gap-2 text-xs">
               <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0" />
-              <span className="text-stone-600 dark:text-stone-300">
+              <span className="text-slate-700 dark:text-slate-300">
                 Hadir: <strong>{todayAttendance.hadir}</strong>
               </span>
             </div>
             <div className="flex items-center gap-2 text-xs">
-              <span className="w-2.5 h-2.5 rounded-full bg-amber-500 shrink-0" />
-              <span className="text-stone-600 dark:text-stone-300">
+              <span className="w-2.5 h-2.5 rounded-full bg-purple-500 shrink-0" />
+              <span className="text-slate-700 dark:text-slate-300">
                 Terlambat: <strong>{todayAttendance.terlambat}</strong>
               </span>
             </div>
             <div className="flex items-center gap-2 text-xs">
-              <span className="w-2.5 h-2.5 rounded-full bg-blue-500 shrink-0" />
-              <span className="text-stone-600 dark:text-stone-300">
+              <span className="w-2.5 h-2.5 rounded-full bg-sky-500 shrink-0" />
+              <span className="text-slate-700 dark:text-slate-300">
                 Sakit/Izin: <strong>{todayAttendance.sakit + todayAttendance.izin}</strong>
               </span>
             </div>
             <div className="flex items-center gap-2 text-xs">
               <span className="w-2.5 h-2.5 rounded-full bg-rose-500 shrink-0" />
-              <span className="text-stone-600 dark:text-stone-300">
+              <span className="text-slate-700 dark:text-slate-300">
                 Alpa: <strong>{todayAttendance.alpa}</strong>
               </span>
             </div>
@@ -463,20 +463,20 @@ export const DashboardView: React.FC = () => {
         </div>
 
         {/* Bar Chart: Comparison Per Class */}
-        <div className="p-6 rounded-2xl bg-white dark:bg-stone-900 border border-stone-200/80 dark:border-stone-800 shadow-xs lg:col-span-2">
+        <div className="p-6 rounded-2xl bg-white/90 dark:bg-slate-900 border border-sky-200/80 dark:border-sky-900/60 shadow-xs lg:col-span-2">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h3 className="font-bold text-sm text-stone-900 dark:text-white flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-[#4a0404]"></span>
+              <h3 className="font-bold text-sm text-slate-900 dark:text-white flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-sky-600"></span>
                 Persentase Kehadiran per Kelas
               </h3>
-              <p className="text-xs text-stone-500 dark:text-stone-400">
+              <p className="text-xs text-sky-800/80 dark:text-sky-300/80">
                 Perbandingan tingkat kedisiplinan rombongan belajar
               </p>
             </div>
             <button
               onClick={() => setActiveTab('data-kelas')}
-              className="text-xs text-[#4a0404] dark:text-rose-400 hover:text-[#380303] hover:underline font-bold flex items-center gap-1"
+              className="text-xs text-sky-600 dark:text-sky-400 hover:text-sky-800 hover:underline font-bold flex items-center gap-1"
             >
               Lihat Detail Kelas <ChevronRight className="w-3.5 h-3.5" />
             </button>
@@ -491,13 +491,13 @@ export const DashboardView: React.FC = () => {
                 <CartesianGrid strokeDasharray="3 3" vertical={false} opacity={0.15} />
                 <XAxis
                   dataKey="name"
-                  tick={{ fontSize: 11, fill: '#78716c' }}
+                  tick={{ fontSize: 11, fill: '#64748b' }}
                   axisLine={false}
                   tickLine={false}
                 />
                 <YAxis
                   domain={[0, 100]}
-                  tick={{ fontSize: 11, fill: '#78716c' }}
+                  tick={{ fontSize: 11, fill: '#64748b' }}
                   axisLine={false}
                   tickLine={false}
                   tickFormatter={(val) => `${val}%`}
@@ -508,7 +508,7 @@ export const DashboardView: React.FC = () => {
                 />
                 <Bar
                   dataKey="rate"
-                  fill="#4a0404"
+                  fill="#0284c7"
                   radius={[4, 4, 0, 0]}
                   maxBarSize={32}
                 />
@@ -521,18 +521,18 @@ export const DashboardView: React.FC = () => {
       {/* Lower Section: 7-Day Trend & Students Needing Attention */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Trend Area Chart */}
-        <div className="p-6 rounded-2xl bg-white dark:bg-stone-900 border border-stone-200/80 dark:border-stone-800 shadow-xs lg:col-span-2">
+        <div className="p-6 rounded-2xl bg-white/90 dark:bg-slate-900 border border-sky-200/80 dark:border-sky-900/60 shadow-xs lg:col-span-2">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h3 className="font-bold text-sm text-stone-900 dark:text-white flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-[#4a0404]"></span>
+              <h3 className="font-bold text-sm text-slate-900 dark:text-white flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-sky-600"></span>
                 Tren Kehadiran 7 Hari Terakhir
               </h3>
-              <p className="text-xs text-stone-500 dark:text-stone-400">
+              <p className="text-xs text-sky-800/80 dark:text-sky-300/80">
                 Stabilitas kehadiran siswa seluruh sekolah
               </p>
             </div>
-            <span className="text-xs font-bold text-[#4a0404] dark:text-rose-300 bg-rose-50 dark:bg-rose-950/60 px-2.5 py-1 rounded-md border border-rose-200 dark:border-rose-900">
+            <span className="text-xs font-bold text-sky-700 dark:text-sky-300 bg-sky-100 dark:bg-sky-950/60 px-2.5 py-1 rounded-md border border-sky-200 dark:border-sky-900">
               Rata-rata: 95.4%
             </span>
           </div>
@@ -545,20 +545,20 @@ export const DashboardView: React.FC = () => {
               >
                 <defs>
                   <linearGradient id="colorPersentase" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#4a0404" stopOpacity={0.3} />
-                    <stop offset="95%" stopColor="#4a0404" stopOpacity={0} />
+                    <stop offset="5%" stopColor="#0284c7" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="#0284c7" stopOpacity={0} />
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} opacity={0.15} />
                 <XAxis
                   dataKey="date"
-                  tick={{ fontSize: 11, fill: '#78716c' }}
+                  tick={{ fontSize: 11, fill: '#64748b' }}
                   axisLine={false}
                   tickLine={false}
                 />
                 <YAxis
                   domain={[80, 100]}
-                  tick={{ fontSize: 11, fill: '#78716c' }}
+                  tick={{ fontSize: 11, fill: '#64748b' }}
                   axisLine={false}
                   tickLine={false}
                   tickFormatter={(val) => `${val}%`}
@@ -569,7 +569,7 @@ export const DashboardView: React.FC = () => {
                 <Area
                   type="monotone"
                   dataKey="persentase"
-                  stroke="#4a0404"
+                  stroke="#0284c7"
                   strokeWidth={2.5}
                   fillOpacity={1}
                   fill="url(#colorPersentase)"
@@ -580,44 +580,44 @@ export const DashboardView: React.FC = () => {
         </div>
 
         {/* Students Needing Attention (Perhatian Khusus) */}
-        <div className="p-6 rounded-2xl bg-white dark:bg-stone-900 border border-stone-200/80 dark:border-stone-800 shadow-xs flex flex-col justify-between">
+        <div className="p-6 rounded-2xl bg-white/90 dark:bg-slate-900 border border-sky-200/80 dark:border-sky-900/60 shadow-xs flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
-                <div className="w-7 h-7 rounded-lg bg-rose-50 dark:bg-rose-950 text-[#4a0404] dark:text-rose-300 flex items-center justify-center">
+                <div className="w-7 h-7 rounded-lg bg-amber-50 dark:bg-amber-950 text-amber-600 dark:text-amber-300 flex items-center justify-center">
                   <AlertTriangle className="w-4 h-4" />
                 </div>
-                <h3 className="font-bold text-sm text-stone-900 dark:text-white">
+                <h3 className="font-bold text-sm text-slate-900 dark:text-white">
                   Perhatian Khusus Siswa
                 </h3>
               </div>
-              <span className="text-[10px] font-bold text-white bg-[#4a0404] px-2 py-0.5 rounded-md shadow-2xs">
+              <span className="text-[10px] font-bold text-white bg-sky-600 px-2 py-0.5 rounded-md shadow-2xs">
                 Tindakan Guru
               </span>
             </div>
-            <p className="text-xs text-stone-500 dark:text-stone-400 mb-4">
+            <p className="text-xs text-sky-800/80 dark:text-sky-300/80 mb-4">
               Siswa dengan riwayat ketidakhadiran berulang atau butuh konfirmasi orang tua:
             </p>
 
             <div className="space-y-2.5">
               {studentsNeedingAttention.length === 0 ? (
-                <div className="p-4 text-center text-xs text-stone-400">
+                <div className="p-4 text-center text-xs text-slate-400">
                   Semua siswa memiliki rekor kehadiran yang sangat baik!
                 </div>
               ) : (
                 studentsNeedingAttention.map((st: any) => (
                   <div
                     key={st.id}
-                    className="p-3 rounded-xl border border-stone-100 dark:border-stone-800 bg-stone-50/50 dark:bg-stone-800/40 flex items-center justify-between gap-2 hover:border-[#4a0404]/30 transition-colors"
+                    className="p-3 rounded-xl border border-sky-100 dark:border-sky-900/50 bg-sky-50/50 dark:bg-sky-950/40 flex items-center justify-between gap-2 hover:border-sky-300 transition-colors"
                   >
                     <div className="min-w-0">
-                      <p className="text-xs font-bold text-stone-900 dark:text-white truncate">
+                      <p className="text-xs font-bold text-slate-900 dark:text-white truncate">
                         {st.name}
                       </p>
-                      <div className="flex items-center gap-2 mt-0.5 text-[11px] text-stone-500">
+                      <div className="flex items-center gap-2 mt-0.5 text-[11px] text-slate-500">
                         <span>{st.className}</span>
                         <span>•</span>
-                        <span className="text-[#4a0404] dark:text-rose-400 font-bold">
+                        <span className="text-rose-600 dark:text-rose-400 font-bold">
                           {st.alpaCount > 0 ? `${st.alpaCount}x Alpa` : `${st.sickCount}x Sakit`}
                         </span>
                       </div>
@@ -640,7 +640,7 @@ export const DashboardView: React.FC = () => {
 
           <button
             onClick={() => setActiveTab('pengajuan-izin')}
-            className="w-full mt-4 py-2.5 bg-[#4a0404] hover:bg-[#380303] text-white rounded-xl text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-1.5 active:scale-95"
+            className="w-full mt-4 py-2.5 bg-sky-600 hover:bg-sky-700 text-white rounded-xl text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-1.5 active:scale-95"
           >
             <span>Cek Surat Izin Masuk</span>
             <ChevronRight className="w-3.5 h-3.5" />

@@ -215,22 +215,22 @@ export const DailyAttendanceView: React.FC<DailyAttendanceViewProps> = ({
   return (
     <div className="space-y-6 pb-12 animate-in fade-in duration-300">
       {/* Top Filter and Controls Header */}
-      <div className="p-6 rounded-2xl bg-white dark:bg-stone-900 border border-stone-200/80 dark:border-stone-800 shadow-xs space-y-5">
+      <div className="p-6 rounded-2xl bg-white/90 dark:bg-slate-900 border border-sky-200/80 dark:border-sky-900/60 shadow-xs space-y-5">
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
           {/* Class & Date Selector */}
           <div className="flex flex-wrap items-center gap-3">
             {/* Class Dropdown */}
-            <div className="flex items-center gap-2 bg-stone-50 dark:bg-stone-800/80 px-3.5 py-2 rounded-xl border border-stone-200/80 dark:border-stone-700">
-              <Layers className="w-4 h-4 text-[#4a0404] dark:text-rose-400" />
-              <span className="text-xs font-bold text-stone-500">Kelas:</span>
+            <div className="flex items-center gap-2 bg-sky-50/80 dark:bg-sky-950/60 px-3.5 py-2 rounded-xl border border-sky-200 dark:border-sky-800">
+              <Layers className="w-4 h-4 text-sky-600 dark:text-sky-400" />
+              <span className="text-xs font-bold text-sky-800 dark:text-sky-300">Kelas:</span>
               <select
                 id="attendance-class-select"
                 value={selectedClassId}
                 onChange={(e) => setSelectedClassId(e.target.value)}
-                className="bg-transparent text-xs font-extrabold text-stone-900 dark:text-white focus:outline-hidden cursor-pointer"
+                className="bg-transparent text-xs font-extrabold text-slate-900 dark:text-white focus:outline-hidden cursor-pointer"
               >
                 {classes.map((cls) => (
-                  <option key={cls.id} value={cls.id} className="dark:bg-stone-900">
+                  <option key={cls.id} value={cls.id} className="dark:bg-slate-900">
                     {cls.name}
                   </option>
                 ))}
@@ -238,22 +238,22 @@ export const DailyAttendanceView: React.FC<DailyAttendanceViewProps> = ({
             </div>
 
             {/* Date Input */}
-            <div className="flex items-center gap-2 bg-stone-50 dark:bg-stone-800/80 px-3.5 py-2 rounded-xl border border-stone-200/80 dark:border-stone-700">
-              <Calendar className="w-4 h-4 text-amber-500" />
-              <span className="text-xs font-bold text-stone-500">Tanggal:</span>
+            <div className="flex items-center gap-2 bg-sky-50/80 dark:bg-sky-950/60 px-3.5 py-2 rounded-xl border border-sky-200 dark:border-sky-800">
+              <Calendar className="w-4 h-4 text-sky-600 dark:text-sky-400" />
+              <span className="text-xs font-bold text-sky-800 dark:text-sky-300">Tanggal:</span>
               <input
                 id="attendance-date-input"
                 type="date"
                 value={selectedDate}
                 onChange={(e) => setSelectedDate(e.target.value)}
-                className="bg-transparent text-xs font-bold text-stone-900 dark:text-white focus:outline-hidden cursor-pointer"
+                className="bg-transparent text-xs font-bold text-slate-900 dark:text-white focus:outline-hidden cursor-pointer"
               />
             </div>
 
             {/* Homeroom teacher badge */}
-            <div className="text-xs text-stone-500 dark:text-stone-400 font-medium px-2 py-1 bg-stone-50 dark:bg-stone-800 rounded-lg border border-stone-200/60 dark:border-stone-700/60 hidden sm:block">
+            <div className="text-xs text-sky-800/80 dark:text-sky-300/80 font-medium px-2.5 py-1 bg-sky-50 dark:bg-sky-950/60 rounded-lg border border-sky-200/60 dark:border-sky-800/60 hidden sm:block">
               Wali Kelas:{' '}
-              <strong className="text-stone-800 dark:text-stone-200">
+              <strong className="text-slate-800 dark:text-slate-200">
                 {currentClass?.teacherName}
               </strong>
             </div>
@@ -264,7 +264,7 @@ export const DailyAttendanceView: React.FC<DailyAttendanceViewProps> = ({
             <button
               id="attendance-mark-all-present-button"
               onClick={() => markAllPresentForClass(selectedClassId, selectedDate)}
-              className="flex-1 sm:flex-none px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-2 active:scale-95"
+              className="flex-1 sm:flex-none px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-2 active:scale-95 cursor-pointer"
             >
               <CheckCheck className="w-4 h-4" />
               <span>Tandai Semua Hadir</span>
@@ -273,7 +273,7 @@ export const DailyAttendanceView: React.FC<DailyAttendanceViewProps> = ({
             <button
               id="attendance-qr-scanner-button"
               onClick={onOpenQRScanner}
-              className="flex-1 sm:flex-none px-3.5 py-2 bg-[#4a0404] hover:bg-[#380303] text-white rounded-xl text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-2 active:scale-95"
+              className="flex-1 sm:flex-none px-3.5 py-2 bg-sky-600 hover:bg-sky-700 text-white rounded-xl text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-2 active:scale-95 cursor-pointer"
             >
               <QrCode className="w-4 h-4" />
               <span>Pindai QR Siswa</span>
@@ -282,7 +282,7 @@ export const DailyAttendanceView: React.FC<DailyAttendanceViewProps> = ({
             <button
               id="attendance-save-all-button"
               onClick={handleSaveAll}
-              className="flex-1 sm:flex-none px-3.5 py-2 bg-amber-500 hover:bg-amber-600 text-stone-950 rounded-xl text-xs font-extrabold transition-all shadow-xs flex items-center justify-center gap-2 active:scale-95"
+              className="flex-1 sm:flex-none px-3.5 py-2 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-xl text-xs font-extrabold transition-all shadow-xs flex items-center justify-center gap-2 active:scale-95 cursor-pointer"
             >
               <Save className="w-4 h-4" />
               <span>Simpan Presensi</span>
@@ -291,15 +291,15 @@ export const DailyAttendanceView: React.FC<DailyAttendanceViewProps> = ({
         </div>
 
         {/* Live Attendance Mini Summary Bar */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 pt-3 border-t border-stone-100 dark:border-stone-800">
-          <div className="p-3 rounded-xl bg-stone-50 dark:bg-stone-800/50 border border-stone-200/60 dark:border-stone-700/60 flex items-center justify-between">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 pt-3 border-t border-sky-100 dark:border-sky-900/60">
+          <div className="p-3 rounded-xl bg-sky-50/70 dark:bg-slate-800/60 border border-sky-200/60 dark:border-sky-900/60 flex items-center justify-between">
             <div>
-              <p className="text-[11px] font-bold text-stone-500">Total Siswa</p>
-              <p className="text-base font-black text-stone-900 dark:text-white">
+              <p className="text-[11px] font-bold text-sky-800 dark:text-sky-300">Total Siswa</p>
+              <p className="text-base font-black text-slate-900 dark:text-white">
                 {summaryStats.total}
               </p>
             </div>
-            <Users className="w-4 h-4 text-stone-400" />
+            <Users className="w-4 h-4 text-sky-400" />
           </div>
 
           <div className="p-3 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200/60 dark:border-emerald-800/60 flex items-center justify-between">
@@ -374,14 +374,14 @@ export const DailyAttendanceView: React.FC<DailyAttendanceViewProps> = ({
       <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
         {/* Search */}
         <div className="relative w-full sm:w-72">
-          <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400" />
+          <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-sky-400" />
           <input
             id="attendance-search-input"
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Cari nama atau NISN siswa..."
-            className="w-full pl-9 pr-4 py-2.5 bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-xl text-xs focus:outline-hidden focus:ring-1 focus:ring-[#4a0404] text-stone-900 dark:text-white placeholder:text-stone-400"
+            className="w-full pl-9 pr-4 py-2.5 bg-white dark:bg-slate-900 border border-sky-200 dark:border-sky-900/60 rounded-xl text-xs focus:outline-hidden focus:ring-1 focus:ring-sky-500 text-slate-900 dark:text-white placeholder:text-slate-400"
           />
         </div>
 
@@ -400,10 +400,10 @@ export const DailyAttendanceView: React.FC<DailyAttendanceViewProps> = ({
             <button
               key={tab.id}
               onClick={() => setStatusFilter(tab.id as any)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                 statusFilter === tab.id
-                  ? 'bg-[#4a0404] text-white shadow-xs'
-                  : 'bg-white dark:bg-stone-900 text-stone-600 dark:text-stone-400 border border-stone-200 dark:border-stone-800 hover:bg-stone-50'
+                  ? 'bg-sky-600 text-white shadow-xs'
+                  : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 border border-sky-200 dark:border-slate-800 hover:bg-sky-50'
               }`}
             >
               {tab.label}
@@ -413,11 +413,11 @@ export const DailyAttendanceView: React.FC<DailyAttendanceViewProps> = ({
       </div>
 
       {/* Interactive Attendance Table */}
-      <div className="bg-white dark:bg-stone-900 rounded-2xl border border-stone-200/80 dark:border-stone-800 shadow-xs overflow-hidden">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-sky-200/80 dark:border-sky-900/60 shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-stone-100 dark:border-stone-800 bg-stone-50/70 dark:bg-stone-900/60 text-[11px] font-bold text-stone-500 dark:text-stone-400 uppercase tracking-wider">
+              <tr className="border-b border-sky-100 dark:border-slate-800 bg-sky-50/70 dark:bg-slate-800/60 text-[11px] font-bold text-sky-900 dark:text-sky-300 uppercase tracking-wider">
                 <th className="py-3.5 px-4 w-12 text-center">No</th>
                 <th className="py-3.5 px-4">Profil Siswa</th>
                 <th className="py-3.5 px-4 hidden md:table-cell">NISN / NIS</th>
@@ -427,10 +427,10 @@ export const DailyAttendanceView: React.FC<DailyAttendanceViewProps> = ({
                 <th className="py-3.5 px-4 text-right">Aksi</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-stone-100 dark:divide-stone-800 text-xs">
+            <tbody className="divide-y divide-sky-100 dark:divide-slate-800 text-xs">
               {displayedStudents.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="py-12 text-center text-stone-400">
+                  <td colSpan={7} className="py-12 text-center text-slate-400">
                     <p className="font-semibold text-sm">Tidak ada data siswa</p>
                     <p className="text-xs mt-1">
                       Coba sesuaikan kata kunci pencarian atau filter status.
@@ -448,24 +448,24 @@ export const DailyAttendanceView: React.FC<DailyAttendanceViewProps> = ({
                   return (
                     <tr
                       key={student.id}
-                      className="hover:bg-stone-50/80 dark:hover:bg-stone-800/40 transition-colors"
+                      className="hover:bg-sky-50/50 dark:hover:bg-slate-800/40 transition-colors"
                     >
                       {/* No */}
-                      <td className="py-3.5 px-4 text-center font-bold text-stone-400">
+                      <td className="py-3.5 px-4 text-center font-bold text-slate-400">
                         {idx + 1}
                       </td>
 
                       {/* Student Info */}
                       <td className="py-3.5 px-4">
                         <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-lg bg-stone-100 dark:bg-stone-800 flex items-center justify-center font-bold text-stone-700 dark:text-stone-300 shrink-0 text-xs border border-stone-200 dark:border-stone-700">
+                          <div className="w-8 h-8 rounded-lg bg-sky-100 dark:bg-slate-800 flex items-center justify-center font-bold text-sky-800 dark:text-sky-300 shrink-0 text-xs border border-sky-200 dark:border-slate-700">
                             {student.gender === 'L' ? '👦' : '👧'}
                           </div>
                           <div>
-                            <div className="font-bold text-stone-900 dark:text-white text-xs">
+                            <div className="font-bold text-slate-900 dark:text-white text-xs">
                               {student.name}
                             </div>
-                            <div className="text-[11px] text-stone-400 flex items-center gap-2">
+                            <div className="text-[11px] text-slate-400 flex items-center gap-2">
                               <span>{student.className}</span>
                               <span>•</span>
                               <span>
@@ -478,15 +478,15 @@ export const DailyAttendanceView: React.FC<DailyAttendanceViewProps> = ({
 
                       {/* NISN */}
                       <td className="py-3.5 px-4 hidden md:table-cell">
-                        <span className="font-mono text-xs text-stone-600 dark:text-stone-400">
+                        <span className="font-mono text-xs text-slate-600 dark:text-slate-400">
                           {student.nisn}
                         </span>
-                        <div className="text-[10px] text-stone-400">NIS: {student.nis}</div>
+                        <div className="text-[10px] text-slate-400">NIS: {student.nis}</div>
                       </td>
 
                       {/* 1-Click Status Button Chips */}
                       <td className="py-3.5 px-4">
-                        <div className="flex items-center justify-center gap-1 bg-stone-100 dark:bg-stone-800/80 p-1 rounded-xl border border-stone-200 dark:border-stone-700 w-fit mx-auto">
+                        <div className="flex items-center justify-center gap-1 bg-sky-100/60 dark:bg-slate-800/80 p-1 rounded-xl border border-sky-200 dark:border-slate-700 w-fit mx-auto">
                           {(
                             [
                               {
@@ -522,10 +522,10 @@ export const DailyAttendanceView: React.FC<DailyAttendanceViewProps> = ({
                                 key={btn.key}
                                 id={`status-btn-${student.id}-${btn.key}`}
                                 onClick={() => handleStatusChange(student.id, btn.key)}
-                                className={`px-2 py-1 rounded-lg font-extrabold text-[11px] transition-all ${
+                                className={`px-2 py-1 rounded-lg font-extrabold text-[11px] transition-all cursor-pointer ${
                                   isSelected
                                     ? btn.activeBg
-                                    : 'text-stone-600 dark:text-stone-400 hover:bg-stone-200 dark:hover:bg-stone-700'
+                                    : 'text-slate-600 dark:text-slate-400 hover:bg-sky-200/60 dark:hover:bg-slate-700'
                                 }`}
                                 title={`Tandai ${btn.label}`}
                               >
@@ -539,12 +539,12 @@ export const DailyAttendanceView: React.FC<DailyAttendanceViewProps> = ({
                       {/* Jam Masuk */}
                       <td className="py-3.5 px-4 hidden lg:table-cell">
                         {currentRecord.status === 'H' || currentRecord.status === 'T' ? (
-                          <div className="flex items-center gap-1.5 text-xs font-mono font-semibold text-stone-700 dark:text-stone-300">
-                            <Clock className="w-3.5 h-3.5 text-stone-400" />
+                          <div className="flex items-center gap-1.5 text-xs font-mono font-semibold text-slate-700 dark:text-slate-300">
+                            <Clock className="w-3.5 h-3.5 text-slate-400" />
                             <span>{currentRecord.timeIn || '07:00'}</span>
                           </div>
                         ) : (
-                          <span className="text-stone-400 font-mono text-[11px]">-</span>
+                          <span className="text-slate-400 font-mono text-[11px]">-</span>
                         )}
                       </td>
 
@@ -558,14 +558,14 @@ export const DailyAttendanceView: React.FC<DailyAttendanceViewProps> = ({
                               note: currentRecord.notes,
                             })
                           }
-                          className="flex items-center gap-1.5 text-left text-xs text-stone-600 dark:text-stone-300 hover:text-[#4a0404] dark:hover:text-rose-400 group truncate w-full"
+                          className="flex items-center gap-1.5 text-left text-xs text-slate-600 dark:text-slate-300 hover:text-sky-600 dark:hover:text-sky-400 group truncate w-full cursor-pointer"
                         >
-                          <Edit3 className="w-3.5 h-3.5 text-stone-400 group-hover:text-[#4a0404] shrink-0" />
+                          <Edit3 className="w-3.5 h-3.5 text-slate-400 group-hover:text-sky-600 shrink-0" />
                           <span className="truncate">
                             {currentRecord.notes ? (
                               currentRecord.notes
                             ) : (
-                              <span className="text-stone-400 italic text-[11px]">
+                              <span className="text-slate-400 italic text-[11px]">
                                 Tambah catatan...
                               </span>
                             )}
@@ -606,7 +606,7 @@ export const DailyAttendanceView: React.FC<DailyAttendanceViewProps> = ({
         >
           <div className="space-y-4">
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-stone-600 dark:text-stone-400 mb-2">
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-2">
                 Keterangan / Alasan Tidak Hadir / Keterlambatan:
               </label>
               <textarea
@@ -620,21 +620,21 @@ export const DailyAttendanceView: React.FC<DailyAttendanceViewProps> = ({
                   })
                 }
                 placeholder="Contoh: Sakit demam, periksa ke puskesmas / Terlambat karena ban bocor..."
-                className="w-full p-3 bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 rounded-xl text-xs focus:outline-hidden focus:ring-1 focus:ring-[#4a0404] text-stone-900 dark:text-white"
+                className="w-full p-3 bg-sky-50/50 dark:bg-slate-800 border border-sky-200 dark:border-slate-700 rounded-xl text-xs focus:outline-hidden focus:ring-1 focus:ring-sky-500 text-slate-900 dark:text-white"
               />
             </div>
 
             <div className="flex justify-end gap-2 pt-2">
               <button
                 onClick={() => setEditingNoteStudent(null)}
-                className="px-4 py-2 bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 text-stone-700 dark:text-stone-300 rounded-xl text-xs font-semibold transition-colors"
+                className="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 rounded-xl text-xs font-semibold transition-colors cursor-pointer"
               >
                 Batal
               </button>
               <button
                 id="attendance-save-note-btn"
                 onClick={handleSaveNote}
-                className="px-5 py-2 bg-[#4a0404] hover:bg-[#380303] text-white rounded-xl text-xs font-bold transition-colors shadow-xs"
+                className="px-5 py-2 bg-sky-600 hover:bg-sky-700 text-white rounded-xl text-xs font-bold transition-colors shadow-xs cursor-pointer"
               >
                 Simpan Catatan
               </button>

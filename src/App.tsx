@@ -130,7 +130,7 @@ const MainLayout: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#fcfcfc] dark:bg-[#0c0a09] text-stone-900 dark:text-stone-100 flex flex-col font-sans transition-colors duration-200">
+    <div className="min-h-screen bg-[#edf6fc] dark:bg-[#0a1120] text-slate-900 dark:text-sky-100 flex flex-col font-sans transition-colors duration-200">
       {/* Toast Alert Notifications Layer */}
       <ToastContainer />
 
@@ -163,12 +163,12 @@ const MainLayout: React.FC = () => {
                 ? 'Klik untuk Perluas Menu Sebelah Kiri (Mode Lengkap)'
                 : 'Klik untuk Perkecil / Lipat Menu Sebelah Kiri (Mode Kompak)'
             }
-            className="p-1.5 rounded-full bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 shadow-xs hover:border-[#4a0404] hover:bg-rose-50 dark:hover:bg-rose-950/40 text-stone-500 hover:text-[#4a0404] dark:hover:text-rose-400 transition-all cursor-pointer active:scale-90"
+            className="p-1.5 rounded-full bg-white dark:bg-sky-950/80 border border-sky-200 dark:border-sky-800 shadow-xs hover:border-sky-500 hover:bg-sky-50 dark:hover:bg-sky-900/60 text-sky-700 hover:text-sky-900 dark:text-sky-300 dark:hover:text-white transition-all cursor-pointer active:scale-90"
           >
             {isSidebarCollapsed ? (
-              <ChevronsRight className="w-3.5 h-3.5 text-[#4a0404] dark:text-rose-400" />
+              <ChevronsRight className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" />
             ) : (
-              <ChevronsLeft className="w-3.5 h-3.5 text-stone-500 hover:text-[#4a0404]" />
+              <ChevronsLeft className="w-3.5 h-3.5 text-sky-600 hover:text-sky-800" />
             )}
           </button>
           
@@ -177,8 +177,8 @@ const MainLayout: React.FC = () => {
             title="Geser / Tarik dengan mouse untuk memperkecil atau memperlebar menu sebelah kiri"
             className={`w-1.5 h-20 my-2 rounded-full cursor-col-resize transition-all ${
               isSidebarDragging
-                ? 'bg-[#4a0404] w-2 ring-2 ring-rose-300 dark:ring-rose-800'
-                : 'bg-stone-200 dark:bg-stone-700 group-hover:bg-[#4a0404]/70'
+                ? 'bg-sky-600 w-2 ring-2 ring-sky-300 dark:ring-sky-700'
+                : 'bg-sky-200/90 dark:bg-sky-900/80 group-hover:bg-sky-500'
             }`}
           />
         </div>

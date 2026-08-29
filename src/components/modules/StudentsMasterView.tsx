@@ -230,13 +230,13 @@ export const StudentsMasterView: React.FC = () => {
   return (
     <div className="space-y-6 pb-12 animate-in fade-in duration-300">
       {/* Top Header & Master Action Bar */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-6 rounded-2xl bg-white dark:bg-stone-900 border border-stone-200/80 dark:border-stone-800 shadow-xs">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-6 rounded-2xl bg-white/90 dark:bg-slate-900 border border-sky-200/80 dark:border-sky-900/60 shadow-xs">
         <div>
-          <h2 className="text-lg font-bold text-stone-900 dark:text-white flex items-center gap-2">
-            <Users className="w-5 h-5 text-[#4a0404] dark:text-rose-400" />
+          <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <Users className="w-5 h-5 text-sky-600 dark:text-sky-400" />
             Master Data Siswa Sekolah Dasar
           </h2>
-          <p className="text-xs text-stone-500 dark:text-stone-400 mt-0.5">
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
             Total {students.length} siswa terdaftar di {classes.length} rombongan belajar
           </p>
         </div>
@@ -245,7 +245,7 @@ export const StudentsMasterView: React.FC = () => {
           <button
             id="download-student-template-btn"
             onClick={downloadStudentTemplate}
-            className="flex-1 sm:flex-none px-3 py-2 bg-amber-50 hover:bg-amber-100 dark:bg-amber-950/40 dark:hover:bg-amber-900/50 text-amber-900 dark:text-amber-200 border border-amber-300 dark:border-amber-800 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5"
+            className="flex-1 sm:flex-none px-3 py-2 bg-amber-50 hover:bg-amber-100 dark:bg-amber-950/40 dark:hover:bg-amber-900/50 text-amber-900 dark:text-amber-200 border border-amber-300 dark:border-amber-800 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer"
             title="Unduh Template Excel untuk import data siswa"
           >
             <Download className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
@@ -265,7 +265,7 @@ export const StudentsMasterView: React.FC = () => {
           <button
             id="export-students-excel-button"
             onClick={() => exportStudentsToExcel(students, classes)}
-            className="flex-1 sm:flex-none px-3.5 py-2 bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-200 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2"
+            className="flex-1 sm:flex-none px-3.5 py-2 bg-sky-50 hover:bg-sky-100 dark:bg-slate-800 dark:hover:bg-slate-700 text-sky-800 dark:text-sky-200 border border-sky-200 dark:border-slate-700 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer"
             title="Download Master Data Siswa format .xlsx"
           >
             <FileSpreadsheet className="w-4 h-4 text-emerald-600" />
@@ -275,7 +275,7 @@ export const StudentsMasterView: React.FC = () => {
           <button
             id="add-student-button"
             onClick={handleOpenAdd}
-            className="flex-1 sm:flex-none px-3.5 py-2 bg-[#4a0404] hover:bg-[#380303] text-white rounded-xl text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-2 active:scale-95"
+            className="flex-1 sm:flex-none px-3.5 py-2 bg-sky-600 hover:bg-sky-700 text-white rounded-xl text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-2 active:scale-95 cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             <span>Tambah Siswa</span>
@@ -284,10 +284,10 @@ export const StudentsMasterView: React.FC = () => {
       </div>
 
       {/* Filter and Search Toolbar */}
-      <div className="p-3.5 rounded-2xl bg-white dark:bg-stone-900 border border-stone-200/80 dark:border-stone-800 shadow-xs flex flex-wrap items-center justify-between gap-3">
+      <div className="p-3.5 rounded-2xl bg-white dark:bg-slate-900 border border-sky-200/80 dark:border-sky-900/60 shadow-xs flex flex-wrap items-center justify-between gap-3">
         {/* Search */}
         <div className="relative w-full md:w-80">
-          <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400" />
+          <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-sky-400" />
           <input
             id="students-master-search-input"
             type="text"
@@ -297,15 +297,15 @@ export const StudentsMasterView: React.FC = () => {
               setCurrentPage(1);
             }}
             placeholder="Cari nama, NISN, atau NIS..."
-            className="w-full pl-9 pr-4 py-2 bg-stone-50 dark:bg-stone-800/80 border border-stone-200 dark:border-stone-700 rounded-xl text-xs focus:outline-hidden focus:ring-1 focus:ring-[#4a0404] text-stone-900 dark:text-white placeholder:text-stone-400"
+            className="w-full pl-9 pr-4 py-2 bg-sky-50/50 dark:bg-slate-800/80 border border-sky-200 dark:border-slate-700 rounded-xl text-xs focus:outline-hidden focus:ring-1 focus:ring-sky-500 text-slate-900 dark:text-white placeholder:text-slate-400"
           />
         </div>
 
         {/* Filters */}
         <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
           {/* Class Filter */}
-          <div className="flex items-center gap-1.5 bg-stone-50 dark:bg-stone-800/80 px-3 py-1.5 rounded-xl border border-stone-200 dark:border-stone-700 text-xs">
-            <Layers className="w-3.5 h-3.5 text-stone-400" />
+          <div className="flex items-center gap-1.5 bg-sky-50/50 dark:bg-slate-800/80 px-3 py-1.5 rounded-xl border border-sky-200 dark:border-slate-700 text-xs">
+            <Layers className="w-3.5 h-3.5 text-sky-500" />
             <select
               id="students-filter-class"
               value={selectedClass}
@@ -313,11 +313,11 @@ export const StudentsMasterView: React.FC = () => {
                 setSelectedClass(e.target.value);
                 setCurrentPage(1);
               }}
-              className="bg-transparent font-bold text-stone-700 dark:text-stone-300 focus:outline-hidden cursor-pointer"
+              className="bg-transparent font-bold text-slate-700 dark:text-slate-300 focus:outline-hidden cursor-pointer"
             >
-              <option value="all">Semua Kelas</option>
+              <option value="all" className="dark:bg-slate-900">Semua Kelas</option>
               {classes.map((cls) => (
-                <option key={cls.id} value={cls.id}>
+                <option key={cls.id} value={cls.id} className="dark:bg-slate-900">
                   {cls.name}
                 </option>
               ))}
@@ -325,7 +325,7 @@ export const StudentsMasterView: React.FC = () => {
           </div>
 
           {/* Status Filter */}
-          <div className="flex items-center gap-1.5 bg-stone-50 dark:bg-stone-800/80 px-3 py-1.5 rounded-xl border border-stone-200 dark:border-stone-700 text-xs">
+          <div className="flex items-center gap-1.5 bg-sky-50/50 dark:bg-slate-800/80 px-3 py-1.5 rounded-xl border border-sky-200 dark:border-slate-700 text-xs">
             <select
               id="students-filter-status"
               value={selectedStatus}
@@ -333,31 +333,31 @@ export const StudentsMasterView: React.FC = () => {
                 setSelectedStatus(e.target.value);
                 setCurrentPage(1);
               }}
-              className="bg-transparent font-bold text-stone-700 dark:text-stone-300 focus:outline-hidden cursor-pointer"
+              className="bg-transparent font-bold text-slate-700 dark:text-slate-300 focus:outline-hidden cursor-pointer"
             >
-              <option value="all">Semua Status</option>
-              <option value="aktif">Aktif</option>
-              <option value="mutasi">Mutasi</option>
-              <option value="lulus">Lulus</option>
+              <option value="all" className="dark:bg-slate-900">Semua Status</option>
+              <option value="aktif" className="dark:bg-slate-900">Aktif</option>
+              <option value="mutasi" className="dark:bg-slate-900">Mutasi</option>
+              <option value="lulus" className="dark:bg-slate-900">Lulus</option>
             </select>
           </div>
 
           {/* Sort By */}
-          <div className="flex items-center gap-1.5 bg-stone-50 dark:bg-stone-800/80 px-3 py-1.5 rounded-xl border border-stone-200 dark:border-stone-700 text-xs">
-            <ArrowUpDown className="w-3.5 h-3.5 text-stone-400" />
+          <div className="flex items-center gap-1.5 bg-sky-50/50 dark:bg-slate-800/80 px-3 py-1.5 rounded-xl border border-sky-200 dark:border-slate-700 text-xs">
+            <ArrowUpDown className="w-3.5 h-3.5 text-sky-500" />
             <select
               id="students-sort-by"
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as any)}
-              className="bg-transparent font-bold text-stone-700 dark:text-stone-300 focus:outline-hidden cursor-pointer"
+              className="bg-transparent font-bold text-slate-700 dark:text-slate-300 focus:outline-hidden cursor-pointer"
             >
-              <option value="name">Urut Nama</option>
-              <option value="nisn">Urut NISN</option>
-              <option value="className">Urut Kelas</option>
+              <option value="name" className="dark:bg-slate-900">Urut Nama</option>
+              <option value="nisn" className="dark:bg-slate-900">Urut NISN</option>
+              <option value="className" className="dark:bg-slate-900">Urut Kelas</option>
             </select>
             <button
               onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
-              className="px-1 font-bold text-stone-500 hover:text-[#4a0404]"
+              className="px-1 font-bold text-sky-600 hover:text-sky-800 dark:text-sky-400 cursor-pointer"
               title="Ganti Urutan (Asc/Desc)"
             >
               {sortOrder === 'asc' ? '↑' : '↓'}
@@ -367,11 +367,11 @@ export const StudentsMasterView: React.FC = () => {
       </div>
 
       {/* Main Students Data Table */}
-      <div className="bg-white dark:bg-stone-900 rounded-2xl border border-stone-200/80 dark:border-stone-800 shadow-xs overflow-hidden">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-sky-200/80 dark:border-sky-900/60 shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-stone-100 dark:border-stone-800 bg-stone-50/70 dark:bg-stone-900/60 text-[11px] font-bold text-stone-500 dark:text-stone-400 uppercase tracking-wider">
+              <tr className="border-b border-sky-100 dark:border-slate-800 bg-sky-50/70 dark:bg-slate-800/60 text-[11px] font-bold text-sky-900 dark:text-sky-300 uppercase tracking-wider">
                 <th className="py-3.5 px-4 text-center w-12">No</th>
                 <th className="py-3.5 px-4">Nama Siswa</th>
                 <th className="py-3.5 px-4">NISN / NIS</th>
@@ -381,10 +381,10 @@ export const StudentsMasterView: React.FC = () => {
                 <th className="py-3.5 px-4 text-right">Aksi</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-stone-100 dark:divide-stone-800 text-xs">
+            <tbody className="divide-y divide-sky-100 dark:divide-slate-800 text-xs">
               {paginatedStudents.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="py-12 text-center text-stone-400">
+                  <td colSpan={7} className="py-12 text-center text-slate-400">
                     <p className="font-semibold text-sm">Tidak ditemukan siswa</p>
                     <p className="text-xs mt-1">Coba sesuaikan filter atau kata kunci.</p>
                   </td>
@@ -393,23 +393,23 @@ export const StudentsMasterView: React.FC = () => {
                 paginatedStudents.map((student, idx) => (
                   <tr
                     key={student.id}
-                    className="hover:bg-stone-50/80 dark:hover:bg-stone-800/40 transition-colors"
+                    className="hover:bg-sky-50/50 dark:hover:bg-slate-800/40 transition-colors"
                   >
-                    <td className="py-3.5 px-4 text-center font-bold text-stone-400">
+                    <td className="py-3.5 px-4 text-center font-bold text-slate-400">
                       {(currentPage - 1) * itemsPerPage + idx + 1}
                     </td>
 
                     {/* Student Name & Avatar */}
                     <td className="py-3.5 px-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-lg bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 flex items-center justify-center font-bold text-xs shrink-0 border border-stone-200/80 dark:border-stone-700">
+                        <div className="w-8 h-8 rounded-lg bg-sky-100 dark:bg-slate-800 text-sky-800 dark:text-sky-300 flex items-center justify-center font-bold text-xs shrink-0 border border-sky-200/80 dark:border-slate-700">
                           {student.gender === 'L' ? '👦' : '👧'}
                         </div>
                         <div>
-                          <div className="font-bold text-stone-900 dark:text-white text-xs">
+                          <div className="font-bold text-slate-900 dark:text-white text-xs">
                             {student.name}
                           </div>
-                          <div className="text-[11px] text-stone-400">
+                          <div className="text-[11px] text-slate-400">
                             {student.gender === 'L' ? 'Laki-laki' : 'Perempuan'} • TTL:{' '}
                             {student.birthDate}
                           </div>
@@ -419,27 +419,27 @@ export const StudentsMasterView: React.FC = () => {
 
                     {/* NISN / NIS */}
                     <td className="py-3.5 px-4">
-                      <div className="font-mono font-bold text-stone-800 dark:text-stone-200">
+                      <div className="font-mono font-bold text-slate-800 dark:text-slate-200">
                         {student.nisn}
                       </div>
-                      <div className="text-[10px] text-stone-400 font-mono">
+                      <div className="text-[10px] text-slate-400 font-mono">
                         NIS: {student.nis}
                       </div>
                     </td>
 
                     {/* Class */}
                     <td className="py-3.5 px-4">
-                      <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-semibold bg-stone-100 dark:bg-stone-800 text-stone-800 dark:text-stone-200 border border-stone-200 dark:border-stone-700">
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-semibold bg-sky-100 dark:bg-slate-800 text-sky-900 dark:text-sky-200 border border-sky-200 dark:border-slate-700">
                         {student.className}
                       </span>
                     </td>
 
                     {/* Parent Info */}
                     <td className="py-3.5 px-4 hidden md:table-cell">
-                      <div className="font-semibold text-stone-800 dark:text-stone-200">
+                      <div className="font-semibold text-slate-800 dark:text-slate-200">
                         {student.parentName}
                       </div>
-                      <div className="text-[11px] text-stone-400 flex items-center gap-1 mt-0.5">
+                      <div className="text-[11px] text-slate-400 flex items-center gap-1 mt-0.5">
                         <PhoneCall className="w-3 h-3 text-emerald-500" />
                         <span>{student.parentPhone}</span>
                       </div>
@@ -456,7 +456,7 @@ export const StudentsMasterView: React.FC = () => {
                         <button
                           id={`view-student-${student.id}`}
                           onClick={() => setViewingStudent(student)}
-                          className="p-1.5 text-stone-500 hover:text-[#4a0404] dark:hover:text-rose-400 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-lg transition-colors"
+                          className="p-1.5 text-slate-500 hover:text-sky-600 dark:hover:text-sky-400 hover:bg-sky-50 dark:hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
                           title="Lihat Detail & Rekam Presensi"
                         >
                           <Eye className="w-4 h-4" />
@@ -465,7 +465,7 @@ export const StudentsMasterView: React.FC = () => {
                         <button
                           id={`edit-student-${student.id}`}
                           onClick={() => handleOpenEdit(student)}
-                          className="p-1.5 text-stone-500 hover:text-amber-600 dark:hover:text-amber-400 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-lg transition-colors"
+                          className="p-1.5 text-slate-500 hover:text-amber-600 dark:hover:text-amber-400 hover:bg-amber-50 dark:hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
                           title="Edit Data Siswa"
                         >
                           <Edit2 className="w-4 h-4" />
@@ -474,7 +474,7 @@ export const StudentsMasterView: React.FC = () => {
                         <button
                           id={`delete-student-${student.id}`}
                           onClick={() => setDeletingStudent(student)}
-                          className="p-1.5 text-stone-500 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-lg transition-colors"
+                          className="p-1.5 text-slate-500 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
                           title="Hapus Siswa"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -489,18 +489,18 @@ export const StudentsMasterView: React.FC = () => {
         </div>
 
         {/* Pagination Toolbar */}
-        <div className="p-4 border-t border-stone-100 dark:border-stone-800 flex items-center justify-between text-xs text-stone-500">
+        <div className="p-4 border-t border-sky-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500">
           <div>
             Menampilkan{' '}
-            <strong className="text-stone-800 dark:text-white">
+            <strong className="text-slate-800 dark:text-white">
               {filteredStudents.length === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1}
             </strong>{' '}
             -{' '}
-            <strong className="text-stone-800 dark:text-white">
+            <strong className="text-slate-800 dark:text-white">
               {Math.min(currentPage * itemsPerPage, filteredStudents.length)}
             </strong>{' '}
             dari{' '}
-            <strong className="text-stone-800 dark:text-white">
+            <strong className="text-slate-800 dark:text-white">
               {filteredStudents.length}
             </strong>{' '}
             siswa
@@ -510,17 +510,17 @@ export const StudentsMasterView: React.FC = () => {
             <button
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               disabled={currentPage === 1}
-              className="p-2 rounded-lg border border-stone-200 dark:border-stone-700 disabled:opacity-30 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors"
+              className="p-2 rounded-lg border border-sky-200 dark:border-slate-700 disabled:opacity-30 hover:bg-sky-50 dark:hover:bg-slate-800 transition-colors cursor-pointer"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
-            <span className="px-3 font-bold text-stone-800 dark:text-white">
+            <span className="px-3 font-bold text-slate-800 dark:text-white">
               {currentPage} / {totalPages}
             </span>
             <button
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
-              className="p-2 rounded-lg border border-stone-200 dark:border-stone-700 disabled:opacity-30 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors"
+              className="p-2 rounded-lg border border-sky-200 dark:border-slate-700 disabled:opacity-30 hover:bg-sky-50 dark:hover:bg-slate-800 transition-colors cursor-pointer"
             >
               <ChevronRight className="w-4 h-4" />
             </button>
@@ -547,7 +547,7 @@ export const StudentsMasterView: React.FC = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* NISN */}
               <div>
-                <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                   NISN (10 Digit): *
                 </label>
                 <input
@@ -556,13 +556,13 @@ export const StudentsMasterView: React.FC = () => {
                   value={formData.nisn}
                   onChange={(e) => setFormData({ ...formData, nisn: e.target.value })}
                   placeholder="0165849201"
-                  className="w-full p-2.5 bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 rounded-xl text-xs font-mono font-bold focus:ring-1 focus:ring-[#4a0404] text-stone-900 dark:text-white"
+                  className="w-full p-2.5 bg-sky-50/50 dark:bg-slate-800 border border-sky-200 dark:border-slate-700 rounded-xl text-xs font-mono font-bold focus:ring-1 focus:ring-sky-500 text-slate-900 dark:text-white"
                 />
               </div>
 
               {/* NIS */}
               <div>
-                <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                   NIS Lokal: *
                 </label>
                 <input
@@ -571,13 +571,13 @@ export const StudentsMasterView: React.FC = () => {
                   value={formData.nis}
                   onChange={(e) => setFormData({ ...formData, nis: e.target.value })}
                   placeholder="250101"
-                  className="w-full p-2.5 bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 rounded-xl text-xs font-mono font-bold focus:ring-1 focus:ring-[#4a0404] text-stone-900 dark:text-white"
+                  className="w-full p-2.5 bg-sky-50/50 dark:bg-slate-800 border border-sky-200 dark:border-slate-700 rounded-xl text-xs font-mono font-bold focus:ring-1 focus:ring-sky-500 text-slate-900 dark:text-white"
                 />
               </div>
 
               {/* Nama Lengkap */}
               <div className="sm:col-span-2">
-                <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                   Nama Lengkap Siswa: *
                 </label>
                 <input
@@ -586,13 +586,13 @@ export const StudentsMasterView: React.FC = () => {
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   placeholder="Contoh: Muhammad Rizky Pratama"
-                  className="w-full p-2.5 bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 rounded-xl text-xs font-bold focus:ring-1 focus:ring-[#4a0404] text-stone-900 dark:text-white"
+                  className="w-full p-2.5 bg-sky-50/50 dark:bg-slate-800 border border-sky-200 dark:border-slate-700 rounded-xl text-xs font-bold focus:ring-1 focus:ring-sky-500 text-slate-900 dark:text-white"
                 />
               </div>
 
               {/* Jenis Kelamin */}
               <div>
-                <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                   Jenis Kelamin:
                 </label>
                 <select
@@ -600,7 +600,7 @@ export const StudentsMasterView: React.FC = () => {
                   onChange={(e) =>
                     setFormData({ ...formData, gender: e.target.value as 'L' | 'P' })
                   }
-                  className="w-full p-2.5 bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 rounded-xl text-xs font-semibold focus:ring-1 focus:ring-[#4a0404] text-stone-900 dark:text-white"
+                  className="w-full p-2.5 bg-sky-50/50 dark:bg-slate-800 border border-sky-200 dark:border-slate-700 rounded-xl text-xs font-semibold focus:ring-1 focus:ring-sky-500 text-slate-900 dark:text-white"
                 >
                   <option value="L">Laki-laki (L)</option>
                   <option value="P">Perempuan (P)</option>
@@ -609,13 +609,13 @@ export const StudentsMasterView: React.FC = () => {
 
               {/* Kelas */}
               <div>
-                <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                   Rombongan Belajar (Kelas): *
                 </label>
                 <select
                   value={formData.classId}
                   onChange={(e) => handleClassChangeInForm(e.target.value)}
-                  className="w-full p-2.5 bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 rounded-xl text-xs font-bold focus:ring-1 focus:ring-[#4a0404] text-stone-900 dark:text-white"
+                  className="w-full p-2.5 bg-sky-50/50 dark:bg-slate-800 border border-sky-200 dark:border-slate-700 rounded-xl text-xs font-bold focus:ring-1 focus:ring-sky-500 text-slate-900 dark:text-white"
                 >
                   {classes.map((cls) => (
                     <option key={cls.id} value={cls.id}>
@@ -627,7 +627,7 @@ export const StudentsMasterView: React.FC = () => {
 
               {/* Tanggal Lahir */}
               <div>
-                <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                   Tanggal Lahir:
                 </label>
                 <input
@@ -636,13 +636,13 @@ export const StudentsMasterView: React.FC = () => {
                   onChange={(e) =>
                     setFormData({ ...formData, birthDate: e.target.value })
                   }
-                  className="w-full p-2.5 bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 rounded-xl text-xs font-semibold focus:ring-1 focus:ring-[#4a0404] text-stone-900 dark:text-white"
+                  className="w-full p-2.5 bg-sky-50/50 dark:bg-slate-800 border border-sky-200 dark:border-slate-700 rounded-xl text-xs font-semibold focus:ring-1 focus:ring-sky-500 text-slate-900 dark:text-white"
                 />
               </div>
 
               {/* Status */}
               <div>
-                <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                   Status Siswa:
                 </label>
                 <select
@@ -653,7 +653,7 @@ export const StudentsMasterView: React.FC = () => {
                       status: e.target.value as 'aktif' | 'mutasi' | 'lulus',
                     })
                   }
-                  className="w-full p-2.5 bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 rounded-xl text-xs font-semibold focus:ring-1 focus:ring-[#4a0404] text-stone-900 dark:text-white"
+                  className="w-full p-2.5 bg-sky-50/50 dark:bg-slate-800 border border-sky-200 dark:border-slate-700 rounded-xl text-xs font-semibold focus:ring-1 focus:ring-sky-500 text-slate-900 dark:text-white"
                 >
                   <option value="aktif">Aktif</option>
                   <option value="mutasi">Mutasi</option>
@@ -663,7 +663,7 @@ export const StudentsMasterView: React.FC = () => {
 
               {/* Nama Orang Tua */}
               <div>
-                <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                   Nama Orang Tua / Wali: *
                 </label>
                 <input
@@ -674,13 +674,13 @@ export const StudentsMasterView: React.FC = () => {
                     setFormData({ ...formData, parentName: e.target.value })
                   }
                   placeholder="Contoh: Agus Pratama"
-                  className="w-full p-2.5 bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 rounded-xl text-xs font-semibold focus:ring-1 focus:ring-[#4a0404] text-stone-900 dark:text-white"
+                  className="w-full p-2.5 bg-sky-50/50 dark:bg-slate-800 border border-sky-200 dark:border-slate-700 rounded-xl text-xs font-semibold focus:ring-1 focus:ring-sky-500 text-slate-900 dark:text-white"
                 />
               </div>
 
               {/* No HP / WhatsApp */}
               <div>
-                <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                   No. WhatsApp Orang Tua: *
                 </label>
                 <input
@@ -691,13 +691,13 @@ export const StudentsMasterView: React.FC = () => {
                     setFormData({ ...formData, parentPhone: e.target.value })
                   }
                   placeholder="081298765432"
-                  className="w-full p-2.5 bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 rounded-xl text-xs font-mono focus:ring-1 focus:ring-[#4a0404] text-stone-900 dark:text-white"
+                  className="w-full p-2.5 bg-sky-50/50 dark:bg-slate-800 border border-sky-200 dark:border-slate-700 rounded-xl text-xs font-mono focus:ring-1 focus:ring-sky-500 text-slate-900 dark:text-white"
                 />
               </div>
 
               {/* Alamat */}
               <div className="sm:col-span-2">
-                <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                   Alamat Tempat Tinggal:
                 </label>
                 <textarea
@@ -707,26 +707,26 @@ export const StudentsMasterView: React.FC = () => {
                     setFormData({ ...formData, address: e.target.value })
                   }
                   placeholder="Jl. Melati No. 12..."
-                  className="w-full p-2.5 bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 rounded-xl text-xs focus:ring-1 focus:ring-[#4a0404] text-stone-900 dark:text-white"
+                  className="w-full p-2.5 bg-sky-50/50 dark:bg-slate-800 border border-sky-200 dark:border-slate-700 rounded-xl text-xs focus:ring-1 focus:ring-sky-500 text-slate-900 dark:text-white"
                 />
               </div>
             </div>
 
-            <div className="flex items-center justify-end gap-2 pt-4 border-t border-stone-100 dark:border-stone-800">
+            <div className="flex items-center justify-end gap-2 pt-4 border-t border-sky-100 dark:border-slate-800">
               <button
                 type="button"
                 onClick={() => {
                   setIsAddModalOpen(false);
                   setEditingStudent(null);
                 }}
-                className="px-4 py-2 bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 text-stone-700 dark:text-stone-300 rounded-xl text-xs font-semibold transition-colors"
+                className="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 rounded-xl text-xs font-semibold transition-colors cursor-pointer"
               >
                 Batal
               </button>
               <button
                 type="submit"
                 id="submit-student-form-button"
-                className="px-5 py-2 bg-[#4a0404] hover:bg-[#380303] text-white rounded-xl text-xs font-bold transition-all shadow-xs"
+                className="px-5 py-2 bg-sky-600 hover:bg-sky-700 text-white rounded-xl text-xs font-bold transition-all shadow-xs cursor-pointer"
               >
                 {isAddModalOpen ? 'Simpan Siswa Baru' : 'Perbarui Data Siswa'}
               </button>
@@ -749,14 +749,14 @@ export const StudentsMasterView: React.FC = () => {
             return (
               <div className="space-y-6">
                 {/* Header card with attendance badge & rate */}
-                <div className="p-4 rounded-xl bg-[#4a0404] text-white flex items-center justify-between shadow-xs">
+                <div className="p-4 rounded-xl bg-gradient-to-r from-sky-600 to-sky-700 text-white flex items-center justify-between shadow-xs">
                   <div className="flex items-center gap-3">
-                    <div className="w-11 h-11 rounded-lg bg-white/10 flex items-center justify-center text-xl">
+                    <div className="w-11 h-11 rounded-lg bg-white/20 flex items-center justify-center text-xl">
                       {viewingStudent.gender === 'L' ? '👦' : '👧'}
                     </div>
                     <div>
                       <h4 className="font-bold text-sm">{viewingStudent.name}</h4>
-                      <p className="text-xs text-rose-100/80">
+                      <p className="text-xs text-sky-100">
                         {viewingStudent.className} • NIS: {viewingStudent.nis}
                       </p>
                     </div>
@@ -765,7 +765,7 @@ export const StudentsMasterView: React.FC = () => {
                     <div className="text-2xl font-black text-amber-300">
                       {stats.rate}%
                     </div>
-                    <span className="text-[10px] uppercase font-bold text-rose-200">
+                    <span className="text-[10px] uppercase font-bold text-sky-100">
                       Tingkat Kehadiran
                     </span>
                   </div>
@@ -808,23 +808,23 @@ export const StudentsMasterView: React.FC = () => {
                 </div>
 
                 {/* Personal & Parent details */}
-                <div className="grid grid-cols-2 gap-3 text-xs bg-stone-50 dark:bg-stone-800/50 p-4 rounded-xl border border-stone-200/80 dark:border-stone-700/80">
+                <div className="grid grid-cols-2 gap-3 text-xs bg-sky-50/50 dark:bg-slate-800/50 p-4 rounded-xl border border-sky-200/80 dark:border-slate-700/80">
                   <div>
-                    <span className="text-stone-400">Orang Tua / Wali:</span>
-                    <p className="font-bold text-stone-800 dark:text-white mt-0.5">
+                    <span className="text-slate-400">Orang Tua / Wali:</span>
+                    <p className="font-bold text-slate-800 dark:text-white mt-0.5">
                       {viewingStudent.parentName}
                     </p>
                   </div>
                   <div>
-                    <span className="text-stone-400">WhatsApp Wali:</span>
-                    <p className="font-bold text-stone-800 dark:text-white mt-0.5 flex items-center gap-1">
+                    <span className="text-slate-400">WhatsApp Wali:</span>
+                    <p className="font-bold text-slate-800 dark:text-white mt-0.5 flex items-center gap-1">
                       <PhoneCall className="w-3 h-3 text-emerald-500" />
                       {viewingStudent.parentPhone}
                     </p>
                   </div>
                   <div className="col-span-2">
-                    <span className="text-stone-400">Alamat Rumah:</span>
-                    <p className="font-medium text-stone-700 dark:text-stone-300 mt-0.5">
+                    <span className="text-slate-400">Alamat Rumah:</span>
+                    <p className="font-medium text-slate-700 dark:text-slate-300 mt-0.5">
                       {viewingStudent.address || 'Belum diisi'}
                     </p>
                   </div>
@@ -832,25 +832,25 @@ export const StudentsMasterView: React.FC = () => {
 
                 {/* Recent Attendance Timeline */}
                 <div>
-                  <h5 className="font-bold text-xs uppercase tracking-wider text-stone-500 mb-2">
+                  <h5 className="font-bold text-xs uppercase tracking-wider text-slate-500 mb-2">
                     Riwayat Presensi Terakhir:
                   </h5>
                   <div className="space-y-2 max-h-44 overflow-y-auto pr-1">
                     {stats.records.length === 0 ? (
-                      <p className="text-xs text-stone-400">Belum ada riwayat.</p>
+                      <p className="text-xs text-slate-400">Belum ada riwayat.</p>
                     ) : (
                       stats.records.slice(0, 5).map((r) => (
                         <div
                           key={r.id}
-                          className="flex items-center justify-between p-2.5 rounded-xl border border-stone-100 dark:border-stone-800 text-xs"
+                          className="flex items-center justify-between p-2.5 rounded-xl border border-sky-100 dark:border-slate-800 text-xs"
                         >
                           <div className="flex items-center gap-2">
-                            <Calendar className="w-3.5 h-3.5 text-stone-400" />
-                            <span className="font-semibold text-stone-700 dark:text-stone-300">
+                            <Calendar className="w-3.5 h-3.5 text-sky-500" />
+                            <span className="font-semibold text-slate-700 dark:text-slate-300">
                               {r.date}
                             </span>
                             {r.notes && (
-                              <span className="text-[11px] text-stone-400 truncate max-w-[150px]">
+                              <span className="text-[11px] text-slate-400 truncate max-w-[150px]">
                                 ({r.notes})
                               </span>
                             )}
@@ -862,7 +862,7 @@ export const StudentsMasterView: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="flex justify-end gap-2 pt-2 border-t border-stone-100 dark:border-stone-800">
+                <div className="flex justify-end gap-2 pt-2 border-t border-sky-100 dark:border-slate-800">
                   <a
                     href={`https://wa.me/62${viewingStudent.parentPhone.replace(/^0/, '')}?text=Assalamu'alaikum%20Bapak/Ibu%20wali%20dari%20${encodeURIComponent(viewingStudent.name)},%20tingkat%20kehadiran%20saat%20ini%20mencapai%20${stats.rate}%.`}
                     target="_blank"
@@ -874,7 +874,7 @@ export const StudentsMasterView: React.FC = () => {
                   </a>
                   <button
                     onClick={() => setViewingStudent(null)}
-                    className="px-4 py-2 bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 rounded-xl text-xs font-semibold"
+                    className="px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-xl text-xs font-semibold cursor-pointer"
                   >
                     Tutup
                   </button>
@@ -894,9 +894,9 @@ export const StudentsMasterView: React.FC = () => {
           maxWidth="sm"
         >
           <div className="space-y-4">
-            <p className="text-xs text-stone-600 dark:text-stone-300 leading-relaxed">
+            <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
               Apakah Anda yakin ingin menghapus data siswa{' '}
-              <strong className="text-stone-900 dark:text-white">
+              <strong className="text-slate-900 dark:text-white">
                 {deletingStudent.name}
               </strong>{' '}
               (NISN: {deletingStudent.nisn})? Data presensi terkait juga akan dihapus.
@@ -905,14 +905,14 @@ export const StudentsMasterView: React.FC = () => {
             <div className="flex justify-end gap-2 pt-2">
               <button
                 onClick={() => setDeletingStudent(null)}
-                className="px-4 py-2 bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 text-stone-700 dark:text-stone-300 rounded-xl text-xs font-semibold"
+                className="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 rounded-xl text-xs font-semibold cursor-pointer"
               >
                 Batal
               </button>
               <button
                 id="confirm-delete-student-btn"
                 onClick={handleConfirmDelete}
-                className="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold transition-colors shadow-xs"
+                className="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold transition-colors shadow-xs cursor-pointer"
               >
                 Ya, Hapus Siswa
               </button>

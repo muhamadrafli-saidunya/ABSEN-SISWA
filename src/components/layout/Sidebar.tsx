@@ -124,28 +124,28 @@ export const Sidebar: React.FC<SidebarProps> = ({
         style={{
           width: undefined, // Handled responsive via inline/classes
         }}
-        className={`fixed top-0 bottom-0 left-0 z-40 bg-white dark:bg-stone-900 border-r border-stone-200/80 dark:border-stone-800 flex flex-col transition-all duration-300 ease-in-out lg:static lg:z-auto lg:h-[calc(100vh-6rem)] lg:rounded-2xl lg:shadow-xs lg:border lg:border-stone-200/80 dark:lg:border-stone-800 shrink-0 ${
+        className={`fixed top-0 bottom-0 left-0 z-40 bg-[#f0f7fc] dark:bg-[#0c182c] border-r border-sky-200/80 dark:border-sky-900/70 flex flex-col transition-all duration-300 ease-in-out lg:static lg:z-auto lg:h-[calc(100vh-6rem)] lg:rounded-2xl lg:shadow-xs lg:border lg:border-sky-200/80 dark:lg:border-sky-900/70 shrink-0 ${
           isOpen ? 'translate-x-0 w-64 md:w-72' : '-translate-x-full lg:translate-x-0'
         } ${isSidebarCollapsed ? 'lg:w-[76px]' : 'lg:w-[260px]'}`}
       >
         {/* Brand Header */}
         <div
-          className={`border-b border-stone-100 dark:border-stone-800 flex items-center transition-all ${
+          className={`border-b border-sky-200/70 dark:border-sky-900/60 flex items-center transition-all ${
             isSidebarCollapsed
               ? 'p-3 flex-col gap-2 justify-center text-center'
               : 'p-4 justify-between gap-3'
           }`}
         >
           <div className={`flex items-center gap-3 min-w-0 ${isSidebarCollapsed ? 'justify-center' : ''}`}>
-            <div className="w-10 h-10 rounded-xl bg-[#4a0404] flex items-center justify-center text-white shadow-xs shrink-0">
+            <div className="w-10 h-10 rounded-xl bg-sky-600 flex items-center justify-center text-white shadow-xs shrink-0">
               <School className="w-5 h-5" />
             </div>
             {!isSidebarCollapsed && (
               <div className="min-w-0 flex-1">
-                <h1 className="text-xs font-extrabold tracking-tight text-stone-900 dark:text-white uppercase truncate">
+                <h1 className="text-xs font-extrabold tracking-tight text-slate-900 dark:text-white uppercase truncate">
                   Absensi Siswa SD
                 </h1>
-                <p className="text-[11px] font-semibold text-[#4a0404] dark:text-rose-400 truncate">
+                <p className="text-[11px] font-semibold text-sky-700 dark:text-sky-400 truncate">
                   {schoolProfile.name}
                 </p>
               </div>
@@ -156,7 +156,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <button
             id="sidebar-collapse-toggle-button"
             onClick={toggleSidebarCollapsed}
-            className="hidden lg:flex p-1.5 rounded-lg text-stone-400 hover:text-[#4a0404] dark:hover:text-rose-400 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors shrink-0 active:scale-95"
+            className="hidden lg:flex p-1.5 rounded-lg text-sky-700 dark:text-sky-300 hover:text-sky-900 dark:hover:text-white hover:bg-sky-100 dark:hover:bg-sky-900/60 transition-colors shrink-0 active:scale-95"
             title={isSidebarCollapsed ? 'Perluas Menu Kiri' : 'Perkecil Menu Kiri'}
           >
             {isSidebarCollapsed ? (
@@ -169,17 +169,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
         {/* Academic Year Info Pill (Only shown when expanded) */}
         {!isSidebarCollapsed ? (
-          <div className="px-4 py-2 bg-stone-50 dark:bg-stone-800/40 border-b border-stone-100 dark:border-stone-800 flex items-center justify-between text-xs transition-all">
-            <div className="flex items-center gap-1.5 text-stone-700 dark:text-stone-300 font-medium truncate">
-              <BookOpen className="w-3.5 h-3.5 text-[#4a0404] dark:text-rose-400 shrink-0" />
+          <div className="px-4 py-2 bg-sky-100/70 dark:bg-sky-950/60 border-b border-sky-200/60 dark:border-sky-900/60 flex items-center justify-between text-xs transition-all">
+            <div className="flex items-center gap-1.5 text-sky-900 dark:text-sky-200 font-medium truncate">
+              <BookOpen className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400 shrink-0" />
               <span className="truncate">TA {schoolProfile.academicYear}</span>
             </div>
-            <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20 shrink-0">
+            <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-sky-600/15 text-sky-800 dark:text-sky-300 border border-sky-400/30 shrink-0">
               {schoolProfile.semester}
             </span>
           </div>
         ) : (
-          <div className="py-1 text-center border-b border-stone-100 dark:border-stone-800 text-[10px] font-bold text-stone-400 dark:text-stone-500">
+          <div className="py-1 text-center border-b border-sky-200/60 dark:border-sky-900/60 text-[10px] font-bold text-sky-700 dark:text-sky-400">
             TA {schoolProfile.academicYear.split('/')[0]}
           </div>
         )}
@@ -207,8 +207,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     : 'justify-between px-3.5 py-2.5'
                 } ${
                   isActive
-                    ? 'bg-orange-500 hover:bg-orange-600 text-white shadow-xs font-bold border border-orange-600'
-                    : 'bg-orange-50/80 dark:bg-orange-950/30 text-orange-950 dark:text-orange-200 border border-orange-200/70 dark:border-orange-900/50 hover:bg-orange-100 dark:hover:bg-orange-900/50 font-semibold'
+                    ? 'bg-sky-600 hover:bg-sky-700 text-white shadow-xs font-bold border border-sky-700'
+                    : 'bg-white/80 dark:bg-sky-950/40 text-sky-950 dark:text-sky-200 border border-sky-200/70 dark:border-sky-900/50 hover:bg-sky-100 dark:hover:bg-sky-900/60 font-semibold'
                 }`}
               >
                 <div
@@ -220,7 +220,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     className={`transition-colors shrink-0 ${
                       isActive
                         ? 'text-white'
-                        : 'text-orange-600 dark:text-orange-400 group-hover:text-orange-700'
+                        : 'text-sky-600 dark:text-sky-400 group-hover:text-sky-700'
                     }`}
                   >
                     {item.icon}
@@ -237,8 +237,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       <span
                         className={`px-2 py-0.5 rounded-full text-xs font-bold ${
                           isActive
-                            ? 'bg-white text-orange-600'
-                            : 'bg-orange-200 dark:bg-orange-900 text-orange-900 dark:text-orange-100'
+                            ? 'bg-white text-sky-700'
+                            : 'bg-sky-200 dark:bg-sky-900 text-sky-900 dark:text-sky-100'
                         }`}
                       >
                         {item.badge}
@@ -253,8 +253,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   <span
                     className={`absolute top-1 right-1 w-2.5 h-2.5 rounded-full ${
                       item.id === 'pengajuan-izin'
-                        ? 'bg-amber-400 ring-2 ring-white dark:ring-stone-900 animate-pulse'
-                        : 'bg-orange-600 ring-2 ring-white dark:ring-stone-900'
+                        ? 'bg-amber-400 ring-2 ring-white dark:ring-slate-900 animate-pulse'
+                        : 'bg-sky-600 ring-2 ring-white dark:ring-slate-900'
                     }`}
                   />
                 )}
@@ -267,16 +267,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <div className="hidden lg:block px-3 py-1.5">
           <button
             onClick={toggleSidebarCollapsed}
-            className={`w-full py-1.5 rounded-xl border border-stone-200 dark:border-stone-800 text-[11px] font-bold text-stone-500 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800/80 hover:text-[#4a0404] dark:hover:text-rose-400 transition-all flex items-center justify-center gap-1.5 active:scale-95 ${
+            className={`w-full py-1.5 rounded-xl border border-sky-200 dark:border-sky-800 text-[11px] font-bold text-sky-700 dark:text-sky-300 hover:bg-sky-100 dark:hover:bg-sky-900/60 hover:text-sky-900 dark:hover:text-white transition-all flex items-center justify-center gap-1.5 active:scale-95 ${
               isSidebarCollapsed ? 'px-1' : 'px-2.5'
             }`}
             title={isSidebarCollapsed ? 'Perluas Menu Kiri' : 'Perkecil Menu Kiri'}
           >
             {isSidebarCollapsed ? (
-              <ChevronsRight className="w-3.5 h-3.5 text-stone-500" />
+              <ChevronsRight className="w-3.5 h-3.5 text-sky-600" />
             ) : (
               <>
-                <ChevronsLeft className="w-3.5 h-3.5 text-stone-500" />
+                <ChevronsLeft className="w-3.5 h-3.5 text-sky-600" />
                 <span>Perkecil Menu Kiri</span>
               </>
             )}
@@ -285,7 +285,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
         {/* Bottom Current User Card & Switcher Trigger */}
         <div
-          className={`border-t border-stone-100 dark:border-stone-800 bg-stone-50/50 dark:bg-stone-900/50 ${
+          className={`border-t border-sky-200/70 dark:border-sky-900/60 bg-sky-100/50 dark:bg-sky-950/50 ${
             isSidebarCollapsed ? 'p-2' : 'p-3'
           }`}
         >
@@ -293,11 +293,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
             id="sidebar-user-switcher-trigger"
             onClick={onOpenUserSwitcher}
             title={isSidebarCollapsed ? `${currentUser.name} (${currentUser.roleTitle}) - Ganti Pengguna` : undefined}
-            className={`w-full rounded-xl bg-white dark:bg-stone-800/80 border border-stone-200 dark:border-stone-700/80 hover:border-[#4a0404]/40 dark:hover:border-rose-700 flex items-center text-left transition-all group ${
+            className={`w-full rounded-xl bg-white dark:bg-sky-950/70 border border-sky-200 dark:border-sky-800 hover:border-sky-500 dark:hover:border-sky-600 flex items-center text-left transition-all group ${
               isSidebarCollapsed ? 'p-1.5 justify-center' : 'p-2.5 gap-3'
             }`}
           >
-            <div className="w-8 h-8 rounded-lg bg-rose-50 dark:bg-rose-950/60 text-[#4a0404] dark:text-rose-300 font-bold text-xs flex items-center justify-center shrink-0 border border-rose-100 dark:border-rose-900/40">
+            <div className="w-8 h-8 rounded-lg bg-sky-100 dark:bg-sky-900/60 text-sky-700 dark:text-sky-300 font-bold text-xs flex items-center justify-center shrink-0 border border-sky-200 dark:border-sky-800">
               {currentUser.name
                 .split(' ')
                 .slice(0, 2)
@@ -307,14 +307,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
             {!isSidebarCollapsed && (
               <>
                 <div className="min-w-0 flex-1">
-                  <p className="text-xs font-bold text-stone-800 dark:text-white truncate group-hover:text-[#4a0404] dark:group-hover:text-rose-300">
+                  <p className="text-xs font-bold text-slate-800 dark:text-white truncate group-hover:text-sky-700 dark:group-hover:text-sky-300">
                     {currentUser.name}
                   </p>
-                  <p className="text-[11px] text-stone-500 dark:text-stone-400 truncate">
+                  <p className="text-[11px] text-sky-700/80 dark:text-sky-300/80 truncate">
                     {currentUser.roleTitle}
                   </p>
                 </div>
-                <span className="text-[10px] font-semibold text-[#4a0404] dark:text-rose-400 bg-rose-50 dark:bg-rose-950/50 px-2 py-0.5 rounded-md border border-rose-200/60 dark:border-rose-900">
+                <span className="text-[10px] font-semibold text-sky-700 dark:text-sky-300 bg-sky-100 dark:bg-sky-900/60 px-2 py-0.5 rounded-md border border-sky-200 dark:border-sky-800">
                   Ganti
                 </span>
               </>
