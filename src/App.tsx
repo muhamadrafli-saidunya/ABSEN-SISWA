@@ -21,6 +21,7 @@ import { DailyAttendanceView } from './components/modules/DailyAttendanceView';
 import { StudentsMasterView } from './components/modules/StudentsMasterView';
 import { ClassMasterView } from './components/modules/ClassMasterView';
 import { ReportsView } from './components/modules/ReportsView';
+import { ImportDataView } from './components/modules/ImportDataView';
 import { LeaveRequestsView } from './components/modules/LeaveRequestsView';
 import { StudentCardGeneratorView } from './components/modules/StudentCardGeneratorView';
 import { SettingsView } from './components/modules/SettingsView';
@@ -102,6 +103,8 @@ const MainLayout: React.FC = () => {
         return <StudentsMasterView />;
       case 'data-kelas':
         return <ClassMasterView />;
+      case 'import-data':
+        return <ImportDataView />;
       case 'rekap-laporan':
         return <ReportsView />;
       case 'pengajuan-izin':

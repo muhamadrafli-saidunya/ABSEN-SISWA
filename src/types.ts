@@ -100,6 +100,7 @@ export type NavigationTab =
   | 'presensi-harian'
   | 'data-siswa'
   | 'data-kelas'
+  | 'import-data'
   | 'rekap-laporan'
   | 'pengajuan-izin'
   | 'kartu-pelajar'

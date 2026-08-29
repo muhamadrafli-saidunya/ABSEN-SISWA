@@ -21,7 +21,10 @@ import {
   ChevronRight,
   UserCheck,
   Award,
+  FileUp,
+  Download,
 } from 'lucide-react';
+import { downloadStudentTemplate, exportStudentsToExcel } from '../../utils/excelHelpers';
 
 export const StudentsMasterView: React.FC = () => {
   const {
@@ -31,6 +34,7 @@ export const StudentsMasterView: React.FC = () => {
     updateStudent,
     deleteStudent,
     attendanceRecords,
+    setActiveTab,
   } = useApp();
 
   // Search, Filter, Sort, Pagination states
@@ -239,13 +243,33 @@ export const StudentsMasterView: React.FC = () => {
 
         <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
           <button
-            id="export-students-csv-button"
-            onClick={handleExportCSV}
+            id="download-student-template-btn"
+            onClick={downloadStudentTemplate}
+            className="flex-1 sm:flex-none px-3 py-2 bg-amber-50 hover:bg-amber-100 dark:bg-amber-950/40 dark:hover:bg-amber-900/50 text-amber-900 dark:text-amber-200 border border-amber-300 dark:border-amber-800 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5"
+            title="Unduh Template Excel untuk import data siswa"
+          >
+            <Download className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+            <span>Template Excel</span>
+          </button>
+
+          <button
+            id="open-import-excel-students-button"
+            onClick={() => setActiveTab('import-data')}
+            className="flex-1 sm:flex-none px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-2 active:scale-95 cursor-pointer"
+            title="Buka Menu Import Excel Data Siswa"
+          >
+            <FileUp className="w-4 h-4 text-emerald-100" />
+            <span>Import Excel</span>
+          </button>
+
+          <button
+            id="export-students-excel-button"
+            onClick={() => exportStudentsToExcel(students, classes)}
             className="flex-1 sm:flex-none px-3.5 py-2 bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-200 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2"
-            title="Download Spreadsheet CSV"
+            title="Download Master Data Siswa format .xlsx"
           >
             <FileSpreadsheet className="w-4 h-4 text-emerald-600" />
-            <span>Ekspor CSV</span>
+            <span>Ekspor Excel</span>
           </button>
 
           <button
@@ -254,7 +278,7 @@ export const StudentsMasterView: React.FC = () => {
             className="flex-1 sm:flex-none px-3.5 py-2 bg-[#4a0404] hover:bg-[#380303] text-white rounded-xl text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-2 active:scale-95"
           >
             <Plus className="w-4 h-4" />
-            <span>Tambah Siswa Baru</span>
+            <span>Tambah Siswa</span>
           </button>
         </div>
       </div>

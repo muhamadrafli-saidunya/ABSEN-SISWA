@@ -75,6 +75,11 @@ export const Topbar: React.FC<TopbarProps> = ({
           title: 'Data Kelas & Wali',
           subtitle: 'Daftar rombongan belajar dan penanggung jawab kelas',
         };
+      case 'import-data':
+        return {
+          title: 'Import Data Excel & Template',
+          subtitle: 'Unggah data siswa massal dan unduh format template Excel resmi',
+        };
       case 'rekap-laporan':
         return {
           title: 'Rekapitulasi & Laporan Presensi',

@@ -17,6 +17,7 @@ import {
   ChevronsRight,
   PanelLeftClose,
   PanelLeftOpen,
+  FileUp,
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -73,6 +74,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
       id: 'data-kelas',
       label: 'Data Kelas & Wali',
       icon: <GraduationCap className="w-5 h-5" />,
+    },
+    {
+      id: 'import-data',
+      label: 'Import Excel',
+      icon: <FileUp className="w-5 h-5" />,
+      badge: 'Excel',
+      badgeColor: 'bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-bold',
     },
     {
       id: 'rekap-laporan',

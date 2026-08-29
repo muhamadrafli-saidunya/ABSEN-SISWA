@@ -45,6 +45,21 @@ interface AppContextType {
   updateStudent: (id: string, updatedData: Partial<Student>) => void;
   deleteStudent: (id: string) => void;
   getStudentById: (id: string) => Student | undefined;
+  batchImportStudents: (
+    importedList: Array<{
+      nisn: string;
+      nis: string;
+      name: string;
+      gender: 'L' | 'P';
+      className: string;
+      birthDate?: string;
+      parentName?: string;
+      parentPhone?: string;
+      address?: string;
+      status?: 'aktif' | 'mutasi' | 'lulus';
+    }>,
+    options?: { overwriteExisting?: boolean }
+  ) => { addedCount: number; updatedCount: number };
 
   // Classes (CRUD)
   classes: ClassRoom[];
@@ -52,6 +67,17 @@ interface AppContextType {
   updateClass: (id: string, updatedData: Partial<ClassRoom>) => void;
   deleteClass: (id: string) => void;
   getClassById: (id: string) => ClassRoom | undefined;
+  batchImportClasses: (
+    importedList: Array<{
+      name: string;
+      grade: number;
+      teacherName: string;
+      teacherNip?: string;
+      roomNumber?: string;
+      academicYear?: string;
+    }>,
+    options?: { overwriteExisting?: boolean }
+  ) => { addedCount: number; updatedCount: number };
 
   // Attendance Operations
   attendanceRecords: AttendanceRecord[];
@@ -534,6 +560,169 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return classes.find((c) => c.id === id);
   };
 
+  // Batch Import Students
+  const batchImportStudents = (
+    importedList: Array<{
+      nisn: string;
+      nis: string;
+      name: string;
+      gender: 'L' | 'P';
+      className: string;
+      birthDate?: string;
+      parentName?: string;
+      parentPhone?: string;
+      address?: string;
+      status?: 'aktif' | 'mutasi' | 'lulus';
+    }>,
+    options?: { overwriteExisting?: boolean }
+  ) => {
+    let addedCount = 0;
+    let updatedCount = 0;
+    const overwrite = options?.overwriteExisting ?? true;
+
+    setStudents((prev) => {
+      const studentMap = new Map<string, Student>();
+      prev.forEach((s) => studentMap.set(s.nisn.trim(), s));
+
+      const classesMap = new Map<string, string>();
+      classes.forEach((c) => {
+        classesMap.set(c.name.toLowerCase().trim(), c.id);
+      });
+
+      importedList.forEach((row, idx) => {
+        const cleanNisn = row.nisn?.toString().trim() || `nisn-${Date.now()}-${idx}`;
+        const cleanName = row.name?.toString().trim() || 'Siswa Baru';
+        const cleanGender = (row.gender?.toString().toUpperCase() === 'P' ? 'P' : 'L') as 'L' | 'P';
+        const rawClassName = row.className?.toString().trim() || 'Kelas 1A';
+
+        // Find or map classId
+        let assignedClassId = classesMap.get(rawClassName.toLowerCase()) || classes[0]?.id || 'c1';
+
+        const existing = studentMap.get(cleanNisn);
+
+        if (existing) {
+          if (overwrite) {
+            studentMap.set(cleanNisn, {
+              ...existing,
+              nis: row.nis?.toString().trim() || existing.nis,
+              name: cleanName,
+              gender: cleanGender,
+              classId: assignedClassId,
+              className: rawClassName,
+              birthDate: row.birthDate?.toString().trim() || existing.birthDate,
+              parentName: row.parentName?.toString().trim() || existing.parentName,
+              parentPhone: row.parentPhone?.toString().trim() || existing.parentPhone,
+              address: row.address?.toString().trim() || existing.address,
+              status: (row.status?.toString().toLowerCase() === 'mutasi'
+                ? 'mutasi'
+                : row.status?.toString().toLowerCase() === 'lulus'
+                ? 'lulus'
+                : 'aktif') as 'aktif' | 'mutasi' | 'lulus',
+            });
+            updatedCount++;
+          }
+        } else {
+          const newStudent: Student = {
+            id: `s-${Date.now()}-${idx}-${Math.random().toString(36).substr(2, 4)}`,
+            nisn: cleanNisn,
+            nis: row.nis?.toString().trim() || `250${idx + 10}`,
+            name: cleanName,
+            gender: cleanGender,
+            classId: assignedClassId,
+            className: rawClassName,
+            birthDate: row.birthDate?.toString().trim() || '2018-01-01',
+            parentName: row.parentName?.toString().trim() || '-',
+            parentPhone: row.parentPhone?.toString().trim() || '-',
+            address: row.address?.toString().trim() || '-',
+            status: (row.status?.toString().toLowerCase() === 'mutasi'
+              ? 'mutasi'
+              : row.status?.toString().toLowerCase() === 'lulus'
+              ? 'lulus'
+              : 'aktif') as 'aktif' | 'mutasi' | 'lulus',
+            createdAt: getTodayDateString(),
+          };
+          studentMap.set(cleanNisn, newStudent);
+          addedCount++;
+        }
+      });
+
+      return Array.from(studentMap.values());
+    });
+
+    addToast({
+      type: 'success',
+      title: 'Import Siswa Berhasil',
+      message: `${addedCount} siswa baru ditambahkan, ${updatedCount} siswa diperbarui.`,
+    });
+
+    return { addedCount, updatedCount };
+  };
+
+  // Batch Import Classes
+  const batchImportClasses = (
+    importedList: Array<{
+      name: string;
+      grade: number;
+      teacherName: string;
+      teacherNip?: string;
+      roomNumber?: string;
+      academicYear?: string;
+    }>,
+    options?: { overwriteExisting?: boolean }
+  ) => {
+    let addedCount = 0;
+    let updatedCount = 0;
+    const overwrite = options?.overwriteExisting ?? true;
+
+    setClasses((prev) => {
+      const classMap = new Map<string, ClassRoom>();
+      prev.forEach((c) => classMap.set(c.name.toLowerCase().trim(), c));
+
+      importedList.forEach((row, idx) => {
+        const cleanName = row.name?.toString().trim() || `Kelas ${idx + 1}`;
+        const key = cleanName.toLowerCase();
+        const existing = classMap.get(key);
+
+        if (existing) {
+          if (overwrite) {
+            classMap.set(key, {
+              ...existing,
+              name: cleanName,
+              grade: Number(row.grade) || existing.grade,
+              teacherName: row.teacherName?.toString().trim() || existing.teacherName,
+              teacherNip: row.teacherNip?.toString().trim() || existing.teacherNip,
+              roomNumber: row.roomNumber?.toString().trim() || existing.roomNumber,
+              academicYear: row.academicYear?.toString().trim() || existing.academicYear,
+            });
+            updatedCount++;
+          }
+        } else {
+          const newClass: ClassRoom = {
+            id: `c-${Date.now()}-${idx}`,
+            name: cleanName,
+            grade: Number(row.grade) || 1,
+            teacherName: row.teacherName?.toString().trim() || 'Guru Belum Ditugaskan',
+            teacherNip: row.teacherNip?.toString().trim() || '-',
+            roomNumber: row.roomNumber?.toString().trim() || 'R. 101',
+            academicYear: row.academicYear?.toString().trim() || schoolProfile.academicYear,
+          };
+          classMap.set(key, newClass);
+          addedCount++;
+        }
+      });
+
+      return Array.from(classMap.values());
+    });
+
+    addToast({
+      type: 'success',
+      title: 'Import Kelas Berhasil',
+      message: `${addedCount} kelas baru ditambahkan, ${updatedCount} kelas diperbarui.`,
+    });
+
+    return { addedCount, updatedCount };
+  };
+
   // Attendance Handlers
   const markAttendance = (
     studentId: string,
@@ -800,11 +989,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         updateStudent,
         deleteStudent,
         getStudentById,
+        batchImportStudents,
         classes,
         addClass,
         updateClass,
         deleteClass,
         getClassById,
+        batchImportClasses,
         attendanceRecords,
         selectedDate,
         setSelectedDate,
