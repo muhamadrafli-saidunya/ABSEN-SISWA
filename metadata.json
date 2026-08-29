@@ -1,0 +1,7 @@
+{
+  "name": "Absensi Siswa SD",
+  "description": "Sistem Informasi Presensi dan Rekapitulasi Kehadiran Siswa Sekolah Dasar Modern dan Akurat",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
