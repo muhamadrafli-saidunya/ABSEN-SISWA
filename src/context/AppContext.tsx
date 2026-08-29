@@ -97,6 +97,13 @@ interface AppContextType {
   dashboardWidthPercent: number;
   setDashboardWidthPercent: (width: number | ((prev: number) => number)) => void;
 
+  // Sidebar Controls (Perkecil / Lipat Menu Sebelah Kiri)
+  isSidebarCollapsed: boolean;
+  setIsSidebarCollapsed: (collapsed: boolean | ((prev: boolean) => boolean)) => void;
+  toggleSidebarCollapsed: () => void;
+  sidebarWidth: number;
+  setSidebarWidth: (width: number | ((prev: number) => number)) => void;
+
   // Reset to default
   resetDataToDefault: () => void;
 }
@@ -113,11 +120,58 @@ const STORAGE_KEYS = {
   USER: 'absensi_sd_user_v1',
   DASHBOARD_SIZE: 'absensi_sd_dashboard_size_v1',
   DASHBOARD_WIDTH: 'absensi_sd_dashboard_width_v1',
+  SIDEBAR_COLLAPSED: 'absensi_sd_sidebar_collapsed_v1',
+  SIDEBAR_WIDTH: 'absensi_sd_sidebar_width_v1',
 };
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // Navigation
   const [activeTab, setActiveTab] = useState<NavigationTab>('dashboard');
+
+  // Sidebar Collapsed / Width State (Menu Kiri)
+  const [isSidebarCollapsed, setIsSidebarCollapsedState] = useState<boolean>(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEYS.SIDEBAR_COLLAPSED);
+      if (saved !== null) return JSON.parse(saved);
+    } catch {}
+    return false;
+  });
+
+  const [sidebarWidth, setSidebarWidthState] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEYS.SIDEBAR_WIDTH);
+      if (saved) {
+        const num = Number(saved);
+        if (num >= 64 && num <= 360) return num;
+      }
+    } catch {}
+    return 260;
+  });
+
+  const setIsSidebarCollapsed = (collapsed: boolean | ((prev: boolean) => boolean)) => {
+    setIsSidebarCollapsedState((prev) => {
+      const next = typeof collapsed === 'function' ? collapsed(prev) : collapsed;
+      try {
+        localStorage.setItem(STORAGE_KEYS.SIDEBAR_COLLAPSED, JSON.stringify(next));
+      } catch {}
+      return next;
+    });
+  };
+
+  const toggleSidebarCollapsed = () => {
+    setIsSidebarCollapsed((prev) => !prev);
+  };
+
+  const setSidebarWidth = (width: number | ((prev: number) => number)) => {
+    setSidebarWidthState((prev) => {
+      const next = typeof width === 'function' ? width(prev) : width;
+      const clamped = Math.min(360, Math.max(64, next));
+      try {
+        localStorage.setItem(STORAGE_KEYS.SIDEBAR_WIDTH, clamped.toString());
+      } catch {}
+      return clamped;
+    });
+  };
 
   // Dashboard Size / Layout State ('full' = 100%, 'compact' = 75%, 'narrow' = 55%)
   const [dashboardSize, setDashboardSizeState] = useState<'full' | 'compact' | 'narrow'>(() => {
@@ -777,6 +831,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         toggleDashboardSize,
         dashboardWidthPercent,
         setDashboardWidthPercent,
+        isSidebarCollapsed,
+        setIsSidebarCollapsed,
+        toggleSidebarCollapsed,
+        sidebarWidth,
+        setSidebarWidth,
         resetDataToDefault,
       }}
     >

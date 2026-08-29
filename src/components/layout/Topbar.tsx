@@ -14,6 +14,8 @@ import {
   Minimize2,
   Maximize2,
   FoldHorizontal,
+  PanelLeftClose,
+  PanelLeftOpen,
 } from 'lucide-react';
 
 interface TopbarProps {
@@ -42,6 +44,8 @@ export const Topbar: React.FC<TopbarProps> = ({
     dashboardSize,
     setDashboardSize,
     toggleDashboardSize,
+    isSidebarCollapsed,
+    toggleSidebarCollapsed,
   } = useApp();
 
   const [showNotifications, setShowNotifications] = useState(false);
@@ -111,8 +115,8 @@ export const Topbar: React.FC<TopbarProps> = ({
       id="app-topbar"
       className="sticky top-0 z-30 h-16 bg-white/95 dark:bg-stone-900/95 backdrop-blur-sm border-b border-stone-200/80 dark:border-stone-800 px-4 md:px-8 flex items-center justify-between transition-colors"
     >
-      {/* Left: Mobile Toggle & Page Titles */}
-      <div className="flex items-center gap-3 md:gap-4 min-w-0">
+      {/* Left: Mobile/Desktop Toggle & Page Titles */}
+      <div className="flex items-center gap-2 md:gap-3.5 min-w-0">
         <button
           id="mobile-sidebar-toggle"
           onClick={onToggleMobileSidebar}
@@ -120,6 +124,20 @@ export const Topbar: React.FC<TopbarProps> = ({
           title="Buka Menu"
         >
           <Menu className="w-5 h-5" />
+        </button>
+
+        {/* Desktop Sidebar Toggle / Minimize Button */}
+        <button
+          id="desktop-sidebar-toggle-topbar"
+          onClick={toggleSidebarCollapsed}
+          className="hidden lg:flex p-2 rounded-xl text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 border border-stone-200/60 dark:border-stone-800 transition-all active:scale-95"
+          title={isSidebarCollapsed ? 'Perluas Menu Kiri (Mode Lengkap)' : 'Perkecil Menu Kiri (Mode Kompak)'}
+        >
+          {isSidebarCollapsed ? (
+            <PanelLeftOpen className="w-4 h-4 text-[#4a0404] dark:text-rose-400" />
+          ) : (
+            <PanelLeftClose className="w-4 h-4 text-stone-600 dark:text-stone-300" />
+          )}
         </button>
 
         <div className="min-w-0">

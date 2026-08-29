@@ -34,12 +34,17 @@ const MainLayout: React.FC = () => {
     toggleDashboardSize,
     dashboardWidthPercent,
     setDashboardWidthPercent,
+    isSidebarCollapsed,
+    setIsSidebarCollapsed,
+    toggleSidebarCollapsed,
+    sidebarWidth,
+    setSidebarWidth,
   } = useApp();
 
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [isQRScannerOpen, setIsQRScannerOpen] = useState(false);
   const [isUserSwitcherOpen, setIsUserSwitcherOpen] = useState(false);
-  const [isDragging, setIsDragging] = useState(false);
+  const [isSidebarDragging, setIsSidebarDragging] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Sync dark mode class on html root element
@@ -51,37 +56,32 @@ const MainLayout: React.FC = () => {
     }
   }, [darkMode]);
 
-  // Handle horizontal dragging to shrink/expand the dashboard
+  // Handle horizontal dragging to shrink/expand the left sidebar menu
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      if (!isDragging || !containerRef.current) return;
+      if (!isSidebarDragging || !containerRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
       const relativeX = e.clientX - rect.left;
-      const totalWidth = rect.width;
       
-      // Calculate available width ratio for right viewport
-      // Sidebar takes ~260px
-      const availableMainWidth = Math.max(320, totalWidth - 280);
-      const mouseOffsetInMain = relativeX - 280;
-      const percent = Math.min(100, Math.max(45, Math.round((mouseOffsetInMain / availableMainWidth) * 100)));
+      // Calculate width for left sidebar (minimum 76px, max 340px)
+      const clampedWidth = Math.min(340, Math.max(76, Math.round(relativeX)));
 
-      setDashboardWidthPercent(percent);
-      if (percent >= 90) {
-        setDashboardSize('full');
-      } else if (percent >= 65) {
-        setDashboardSize('compact');
+      if (clampedWidth < 140) {
+        setIsSidebarCollapsed(true);
+        setSidebarWidth(76);
       } else {
-        setDashboardSize('narrow');
+        setIsSidebarCollapsed(false);
+        setSidebarWidth(clampedWidth);
       }
     };
 
     const handleMouseUp = () => {
-      if (isDragging) {
-        setIsDragging(false);
+      if (isSidebarDragging) {
+        setIsSidebarDragging(false);
       }
     };
 
-    if (isDragging) {
+    if (isSidebarDragging) {
       window.addEventListener('mousemove', handleMouseMove);
       window.addEventListener('mouseup', handleMouseUp);
     }
@@ -89,7 +89,7 @@ const MainLayout: React.FC = () => {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [isDragging, setDashboardWidthPercent, setDashboardSize]);
+  }, [isSidebarDragging, setSidebarWidth, setIsSidebarCollapsed]);
 
   // Render view based on activeTab
   const renderActiveView = () => {
@@ -150,32 +150,32 @@ const MainLayout: React.FC = () => {
           onOpenUserSwitcher={() => setIsUserSwitcherOpen(true)}
         />
 
-        {/* Vertical Resize / Pull Handle (Desktop) */}
-        <div className="hidden lg:flex flex-col items-center justify-center self-stretch z-10 group px-0.5">
+        {/* Vertical Resize / Pull Handle for Left Sidebar Menu (Desktop) */}
+        <div className="hidden lg:flex flex-col items-center justify-center self-stretch z-10 group px-0.5 select-none">
           <button
-            id="drag-resize-toggle-button"
-            onClick={toggleDashboardSize}
+            id="sidebar-drag-resize-toggle-button"
+            onClick={toggleSidebarCollapsed}
             title={
-              dashboardSize === 'full'
-                ? 'Tarik/Klik untuk Perkecil Dasbor Kanan (Mode Kompak)'
-                : 'Klik untuk Perbesar Dasbor Kanan (Mode Penuh)'
+              isSidebarCollapsed
+                ? 'Klik untuk Perluas Menu Sebelah Kiri (Mode Lengkap)'
+                : 'Klik untuk Perkecil / Lipat Menu Sebelah Kiri (Mode Kompak)'
             }
             className="p-1.5 rounded-full bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 shadow-xs hover:border-[#4a0404] hover:bg-rose-50 dark:hover:bg-rose-950/40 text-stone-500 hover:text-[#4a0404] dark:hover:text-rose-400 transition-all cursor-pointer active:scale-90"
           >
-            {dashboardSize === 'full' ? (
-              <ChevronsLeft className="w-3.5 h-3.5" />
+            {isSidebarCollapsed ? (
+              <ChevronsRight className="w-3.5 h-3.5 text-[#4a0404] dark:text-rose-400" />
             ) : (
-              <ChevronsRight className="w-3.5 h-3.5" />
+              <ChevronsLeft className="w-3.5 h-3.5 text-stone-500 hover:text-[#4a0404]" />
             )}
           </button>
           
           <div
-            onMouseDown={() => setIsDragging(true)}
-            title="Geser/Tarik untuk menyesuaikan lebar dasbor"
+            onMouseDown={() => setIsSidebarDragging(true)}
+            title="Geser / Tarik dengan mouse untuk memperkecil atau memperlebar menu sebelah kiri"
             className={`w-1.5 h-20 my-2 rounded-full cursor-col-resize transition-all ${
-              isDragging
-                ? 'bg-[#4a0404] w-2'
-                : 'bg-stone-200 dark:bg-stone-700 group-hover:bg-[#4a0404]/60'
+              isSidebarDragging
+                ? 'bg-[#4a0404] w-2 ring-2 ring-rose-300 dark:ring-rose-800'
+                : 'bg-stone-200 dark:bg-stone-700 group-hover:bg-[#4a0404]/70'
             }`}
           />
         </div>
